@@ -1,0 +1,39 @@
+{
+	"configs": [{
+		"entity": "collections",
+		"requestPosition": "categoryUrl",
+		"value": "/collections/${value}"
+	},
+	{
+		"entity": "brands",
+		"requestPosition": "categoryUrl",
+		"requestPosition2": "configSelectedCategories",
+		"value": "/brands/${value}",
+		"value2": "{\"name\": \"brands\",\"value\": \"${value}\"}"
+	},
+	{
+		"entity": "product",
+		"requestPosition": "search",
+		"value": "${value}"
+	},
+	{
+		"entity": "color",
+		"requestPosition": "configSelectedVariants",
+		"value": "{\"name\": \"style\",\"value\": \"${value}\"}"
+	},
+	{
+		"entity": "sexe",
+		"requestPosition": "search",
+		"value": "${value}"
+	},
+	{
+		"entity": "budgetMin",
+		"requestPosition": "lowerBound",
+		"value": "${value}"
+	},
+	{
+		"entity": "budgetMax",
+		"requestPosition": "upperBound",
+		"value": "${value}"
+	}]
+}

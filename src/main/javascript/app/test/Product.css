@@ -1,0 +1,21 @@
+.product-card{  
+	box-shadow: 0 7px 25px #B5B5B5;
+	height: auto;
+	margin-bottom: 20px;
+}
+
+.product-match-high{
+    text-align: center;
+}
+
+.product-img{
+	width: 100%;
+}
+
+.product-row{
+	min-height: 65px
+}
+
+.product-name, .product-price{
+	margin-left: 5px
+}
