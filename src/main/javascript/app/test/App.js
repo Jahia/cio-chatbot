@@ -1,33 +1,38 @@
-import React,{ Component } from 'react';
+import React from 'react';
 import Conversation from './Conversation.js';
 import './App.css';
-import ProductList from './ProductList.jsx'
+import ProductList from './ProductList.jsx';
+import gqlQueries from "../gqlQueries";
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.state = {
-      conversationId: "",
-      // A Message Object consists of a message[, intent, date, isUser]
-      messageObjectList: [],
-	  result:""
-    };
+        this.state = {
+            conversationId   : "",
+            // A Message Object consists of a message[, intent, date, isUser]
+            messageObjectList: [],
+            result           : ""
+        };
 
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.callWatson('hello');
-  }
-  
-  callWatson(message) {
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
 
-    fetch(this.props.dxContext.servletContext + '/modules/graphql',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            query: `query ($message: String!,$conversationId : String){
+    componentDidMount() {
+        // Todo: Call grapqhql entry point for favoriteColor (when window.cxs (CDP profile) is available). This will give context for the style.
+        this.callWatson('hello');
+    }
+
+    callWatson(message) {
+
+        fetch(this.props.dxContext.servletContext + '/modules/graphql',
+            {
+                method : 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body   : JSON.stringify({
+                        query    : `query ($message: String!,$conversationId : String){
 		sendMessage(message:$message, conversationId:$conversationId){
 			conversationId
 			entities{
@@ -40,106 +45,105 @@ class App extends React.Component {
 			canSearch
 		}
 	}`,
-         variables  : {
-			message: message,
-			conversationId	: this.state.conversationId		
-         }
-      }
-    )
-  }).then((response) => {
-      if (!response.ok) {
-        return reject(response);
-      }
+                        variables: {
+                            message       : message,
+                            conversationId: this.state.conversationId
+                        }
+                    }
+                )
+            }).then((response) => {
+            if (!response.ok) {
+                return reject(response);
+            }
 
-      return response.json();
-    }).then((responseJson) => {
-		
-		responseJson.data.sendMessage.date = new Date();
-        this.handleResponse(responseJson.data.sendMessage);
-	  }).catch(function(error) {
-        throw error;
-      });
-  }
+            return response.json();
+        }).then((responseJson) => {
 
-  handleResponse(responseJson) {
-      const outputMessage = responseJson.outputMessages.filter(text => text).join('\n');
-      const outputIntent = responseJson.intents[0] ;
-      const outputDate = responseJson.date.toLocaleTimeString();
-      const outputConversationId = responseJson.conversationId;
-      this.setState({
-        conversationId: outputConversationId
-      });
-      const msgObj = {
-        position: 'left',
-        label: outputIntent,
-        message: outputMessage,
-        date: outputDate,
-        hasTail: true
-      };
-      this.addMessage(msgObj);
-	   if(responseJson.canSearch){
-			  this.formatProducts(outputConversationId);
-	  }
-  }
+            responseJson.data.sendMessage.date = new Date();
+            this.handleResponse(responseJson.data.sendMessage);
+        }).catch(function (error) {
+            throw error;
+        });
+    }
 
-  addMessage(msgObj) {
-    this.setState({
-      messageObjectList: [ ...this.state.messageObjectList , msgObj]
-    });
-  }
+    handleResponse(responseJson) {
+        const outputMessage        = responseJson.outputMessages.filter(text => text).join('\n');
+        const outputIntent         = responseJson.intents[0];
+        const outputDate           = responseJson.date.toLocaleTimeString();
+        const outputConversationId = responseJson.conversationId;
+        this.setState({
+            conversationId: outputConversationId
+        });
+        const msgObj = {
+            position: 'left',
+            label   : outputIntent,
+            message : outputMessage,
+            date    : outputDate,
+            hasTail : true
+        };
+        this.addMessage(msgObj);
+        if (responseJson.canSearch) {
+            this.formatProducts(outputConversationId);
+        }
+    }
 
-  handleSubmit(e) {
-    const inputMessage = e.target.value;
-    const inputDate = new Date();
-    const formattedDate = inputDate.toLocaleTimeString();
-    const msgObj = {
-      position: 'right',
-      message: inputMessage,
-      date: formattedDate,
-      hasTail: true
-    };
-    this.addMessage(msgObj);
-    e.target.value = '';
-    this.callWatson(inputMessage);
-  }
+    addMessage(msgObj) {
+        this.setState({
+            messageObjectList: [...this.state.messageObjectList, msgObj]
+        });
+    }
 
-  scrollToBottom() {
-    const element = document.getElementsByClassName('conversation__messages')[0];
-    element.scrollTop = element.scrollHeight;
-  }
+    handleSubmit(e) {
+        const inputMessage  = e.target.value;
+        const inputDate     = new Date();
+        const formattedDate = inputDate.toLocaleTimeString();
+        const msgObj        = {
+            position: 'right',
+            message : inputMessage,
+            date    : formattedDate,
+            hasTail : true
+        };
+        this.addMessage(msgObj);
+        e.target.value = '';
+        this.callWatson(inputMessage);
+    }
 
-  componentDidUpdate() {
-    this.scrollToBottom();
-  }
-  
-  formatProducts(conversationId) {
-      console.log("rendering products");
-	  this.props.dxContext.conversationId=conversationId;
-	  console.log(window.cxs);
-      if (window.cxs !== undefined) {
-          this.props.dxContext.profileId=window.cxs.profileId;
-      }
+    scrollToBottom() {
+        const element     = document.getElementsByClassName('conversation__messages')[0];
+        element.scrollTop = element.scrollHeight;
+    }
 
-      const formattedResult = <ProductList dxContext={this.props.dxContext} />
-	  this.setState({
-				result: formattedResult
-			});
-  }
+    componentDidUpdate() {
+        this.scrollToBottom();
+    }
 
+    formatProducts(conversationId) {
+        console.log("rendering products");
+        this.props.dxContext.conversationId = conversationId;
+        console.log(window.cxs);
+        if (window.cxs !== undefined) {
+            this.props.dxContext.profileId = window.cxs.profileId;
+        }
 
-  render() {
-    return (
-      <div className="app-wrapper">
-        <Conversation
-          onSubmit={this.handleSubmit}
-          messageObjectList={this.state.messageObjectList}
-        />
-		<div className="watson_result">
-			{this.state.result}
-		</div>
-      </div>
-    );
-  }
+        const formattedResult = <ProductList dxContext={this.props.dxContext}/>
+        this.setState({
+            result: formattedResult
+        });
+    }
+
+    render() {
+        return (
+            <div className="app-wrapper">
+                <Conversation
+                    onSubmit={this.handleSubmit}
+                    messageObjectList={this.state.messageObjectList}
+                />
+                <div className="watson_result">
+                    {this.state.result}
+                </div>
+            </div>
+        );
+    }
 }
 
 export default App;
