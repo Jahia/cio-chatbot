@@ -35,5 +35,10 @@
 		"entity": "budgetMax",
 		"requestPosition": "upperBound",
 		"value": "${value}"
+	},
+	{
+		"entity": "size",
+		"requestPosition": "configSelectedVariants",
+		"value": "{\"name\": \"size\",\"value\": \"${value}\"}"
 	}]
 }

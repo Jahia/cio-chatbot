@@ -11,7 +11,7 @@ class App extends React.Component {
       conversationId: "",
       // A Message Object consists of a message[, intent, date, isUser]
       messageObjectList: [],
-      discoveryNumber: 0
+	  result:""
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -77,7 +77,7 @@ class App extends React.Component {
         hasTail: true
       };
       this.addMessage(msgObj);
-	  if(responseJson.canSearch){
+	   if(responseJson.canSearch){
 			  this.formatProducts(outputConversationId);
 	  }
   }
@@ -115,20 +115,22 @@ class App extends React.Component {
   formatProducts(conversationId) {
 	  this.props.dxContext.conversationId=conversationId;
       const formattedResult = <ProductList dxContext={this.props.dxContext} />
-	  this.addMessage({ message: formattedResult });
+	  this.setState({
+				result: formattedResult
+			});
   }
 
 
   render() {
     return (
       <div className="app-wrapper">
-        <p className="conversation__intro">
-                    Watson Assistant :
-        </p>
         <Conversation
           onSubmit={this.handleSubmit}
           messageObjectList={this.state.messageObjectList}
         />
+		<div className="watson_result">
+			{this.state.result}
+		</div>
       </div>
     );
   }

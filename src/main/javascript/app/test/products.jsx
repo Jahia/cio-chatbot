@@ -20,11 +20,11 @@ class Products extends React.Component {
 
         const prods = this.props.fetchProducts.products ? this.props.fetchProducts.products : [];
 
-  return <Grid className="product-container">
+  return <Grid className="product-container" fluid="true">
 				<Row className="product-row">
 				{
 					prods.map((prod) => (
-					<Col xs={6} md={4} lg={3}>
+					<Col xs={6} md={4} lg={4}>
 						<div className="product-card">
 							<div className="product">
 								<Row className="product-row product-header">
