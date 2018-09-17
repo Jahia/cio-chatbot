@@ -18,7 +18,7 @@ public class WatsonQueryExtension {
 
 	@GraphQLField
 	public static WatsonResponse sendMessage(@GraphQLNonNull @GraphQLName("message") String message,
-			@GraphQLDescription("id of conversation sended in the response") @GraphQLName("conversationId") String conversationId) {
+			@GraphQLDescription("id of conversation sent in the response") @GraphQLName("conversationId") String conversationId) {
 
 		MessageResponse messageResponse = WatsonAssistant.sendMessage(message, conversationId);
 		WatsonResponse response = WatsonResponse.getResponse(messageResponse);

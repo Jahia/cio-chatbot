@@ -3,11 +3,18 @@ package org.jahia.modules.dx.react.starter.assistant.config;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.apache.log4j.Logger;
+import org.jahia.osgi.BundleResource;
+import org.jahia.osgi.BundleUtils;
+import org.osgi.framework.Bundle;
 import org.springframework.util.ResourceUtils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -28,10 +35,13 @@ public class EntitiesConfigService {
 	}
 
 	public void init() {
-		File fileConfig = null;
+		InputStream fileConfig = null;
 		try {
-			fileConfig = ResourceUtils.getFile("entitiesConfig.json");
-		} catch (FileNotFoundException e) {
+			Bundle bundle = BundleUtils.getBundle("dx-react-starter", "1.0-SNAPSHOT");
+			URL resourceUri = bundle.getResource("entitiesConfig.json");
+			BundleResource bundleResource = new BundleResource(resourceUri, bundle);
+			fileConfig = bundleResource.getInputStream();
+		} catch (IOException e) {
 			LOGGER.error("entitiesConfig file not found", e);
 			return;
 		}

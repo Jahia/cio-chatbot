@@ -20,7 +20,7 @@ class Products extends React.Component {
 
         const prods = this.props.fetchProducts.products ? this.props.fetchProducts.products : [];
 
-  return <Grid className="product-container" fluid="true">
+  return <Grid className="product-container" fluid={true}>
 				<Row className="product-row">
 				{
 					prods.map((prod) => (
@@ -64,7 +64,8 @@ const ProductsQuery = graphql(gqlQueries.PRODUCT_QUERY, {
     options(props) {
         return {
             variables  : {
-                "conversationId": props.dxContext.conversationId
+                "conversationId": props.dxContext.conversationId,
+                "profileId" : props.dxContext.profileId
             }
         }
     }

@@ -8,7 +8,7 @@
 
 <c:set var="targetId" value="reactComponentBrandsBanner${fn:replace(currentNode.identifier,'-','_')}"/>
 
-<template:addResources type="javascript" resources="apps/vendors.js" />
+<template:addResources type="javascript" resources="apps/vendors-chatbot.js" />
 <template:addResources type="javascript" resources="apps/testComponent.js" />
 
 <div id="${targetId}">loading..</div>

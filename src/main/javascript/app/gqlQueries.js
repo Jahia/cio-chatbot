@@ -26,8 +26,8 @@ const gqlQueries = {
 		}
 	}` */
 
-	,PRODUCT_QUERY: gql`query productList($conversationId : String!) {
-		  products(conversationId : $conversationId,limit :50, offset:0 ) {
+	,PRODUCT_QUERY: gql`query productList($conversationId : String!, $profileId : String) {
+		  products(conversationId : $conversationId,limit :50, offset:0, profileId : $profileId ) {
 			sku
 			name
 			mountedPath

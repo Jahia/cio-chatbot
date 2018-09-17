@@ -113,7 +113,13 @@ class App extends React.Component {
   }
   
   formatProducts(conversationId) {
+      console.log("rendering products");
 	  this.props.dxContext.conversationId=conversationId;
+	  console.log(window.cxs);
+      if (window.cxs !== undefined) {
+          this.props.dxContext.profileId=window.cxs.profileId;
+      }
+
       const formattedResult = <ProductList dxContext={this.props.dxContext} />
 	  this.setState({
 				result: formattedResult

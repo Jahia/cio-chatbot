@@ -42,7 +42,7 @@ module.exports = {
             cacheGroups: {
                 commons: {
                     test: /[\\/]node_modules[\\/]/,
-                    name: 'vendors',
+                    name: 'vendors-chatbot',
                     chunks: 'all'
                 }
             }

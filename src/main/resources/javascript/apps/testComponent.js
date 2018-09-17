@@ -147,7 +147,7 @@
 /******/
 /******/
 /******/ 	// add entry module to deferred list
-/******/ 	deferredModules.push([0,"vendors"]);
+/******/ 	deferredModules.push([0,"vendors-chatbot"]);
 /******/ 	// run deferred modules when ready
 /******/ 	return checkDeferredModules();
 /******/ })
@@ -166,7 +166,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "html, body {\n  height: 100%;\n}\n\n#root {\n  margin: 0;\n  height: 100%;\n}\n\n.app-wrapper {\n  width: 100%;\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n  justify-content: flex-start;\n  align-items: stretch;\n  align-content: stretch;\n}\n\n.conversation {\n  flex: 1;\n}\n.conversation__intro {\n  text-align: center;\n  color: #c7c7c7;\n}\n", ""]);
+exports.push([module.i, ".app-wrapper {\n  width: 100%;\n  height: 100%;\n  display: flex;\n}\n\n.watson_result{\n\tmax-width: 50%;\n}\n.conversation__intro {\n  text-align: center;\n  color: #c7c7c7;\n}\n", ""]);
 
 // exports
 
@@ -223,7 +223,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".product-card{  \r\n\tbox-shadow: 0 7px 25px #B5B5B5;\r\n\theight: auto;\r\n\tmargin-bottom: 20px;\r\n}\r\n\r\n.product-match-high{\r\n    text-align: center;\r\n}\r\n\r\n.product-img{\r\n\twidth: 100%;\r\n}\r\n\r\n.product-row{\r\n\tmin-height: 65px\r\n}\r\n\r\n.product-name, .product-price{\r\n\tmargin-left: 5px\r\n}", ""]);
+exports.push([module.i, ".product-card{  \n\tbox-shadow: 0 7px 25px #B5B5B5;\n\theight: auto;\n\tmargin-bottom: 20px;\n}\n\n.product-match-high{\n    text-align: center;\n}\n\n.product-img{\n\twidth: 100%;\n}\n\n.product-row{\n\tmin-height: 65px\n}\n\n.product-name, .product-price{\n\tmargin-left: 5px\n}", ""]);
 
 // exports
 
@@ -262,7 +262,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var graphql_tag__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! graphql-tag */ "./node_modules/graphql-tag/src/index.js");
 /* harmony import */ var graphql_tag__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(graphql_tag__WEBPACK_IMPORTED_MODULE_0__);
 var _templateObject = _taggedTemplateLiteral(['query Sites($path: String!){\n        jcr {\n            nodeByPath(path: $path) {\n              displayName  \n              name\n              path\n              children {\n                nodes {\n                  displayName\n                  name\n                }\n              }\n            }\n          }\n    }'], ['query Sites($path: String!){\n        jcr {\n            nodeByPath(path: $path) {\n              displayName  \n              name\n              path\n              children {\n                nodes {\n                  displayName\n                  name\n                }\n              }\n            }\n          }\n    }']),
-    _templateObject2 = _taggedTemplateLiteral(['query productList($conversationId : String!) {\n\t\t  products(conversationId : $conversationId,limit :50, offset:0 ) {\n\t\t\tsku\n\t\t\tname\n\t\t\tmountedPath\n\t\t\tvanityUrl\n\t\t\tcode\n\t\t\timages {\n\t\t\t  altText\n\t\t\t  format\n\t\t\t  imageType\n\t\t\t  url\n\t\t\t}\n\t\t\tprice{\n\t\t\t\tformattedValue\n\t\t\t}\n\t\t}\n\t}'], ['query productList($conversationId : String!) {\n\t\t  products(conversationId : $conversationId,limit :50, offset:0 ) {\n\t\t\tsku\n\t\t\tname\n\t\t\tmountedPath\n\t\t\tvanityUrl\n\t\t\tcode\n\t\t\timages {\n\t\t\t  altText\n\t\t\t  format\n\t\t\t  imageType\n\t\t\t  url\n\t\t\t}\n\t\t\tprice{\n\t\t\t\tformattedValue\n\t\t\t}\n\t\t}\n\t}']);
+    _templateObject2 = _taggedTemplateLiteral(['query productList($conversationId : String!, $profileId : String) {\n\t\t  products(conversationId : $conversationId,limit :50, offset:0, profileId : $profileId ) {\n\t\t\tsku\n\t\t\tname\n\t\t\tmountedPath\n\t\t\tvanityUrl\n\t\t\tcode\n\t\t\timages {\n\t\t\t  altText\n\t\t\t  format\n\t\t\t  imageType\n\t\t\t  url\n\t\t\t}\n\t\t\tprice{\n\t\t\t\tformattedValue\n\t\t\t}\n\t\t}\n\t}'], ['query productList($conversationId : String!, $profileId : String) {\n\t\t  products(conversationId : $conversationId,limit :50, offset:0, profileId : $profileId ) {\n\t\t\tsku\n\t\t\tname\n\t\t\tmountedPath\n\t\t\tvanityUrl\n\t\t\tcode\n\t\t\timages {\n\t\t\t  altText\n\t\t\t  format\n\t\t\t  imageType\n\t\t\t  url\n\t\t\t}\n\t\t\tprice{\n\t\t\t\tformattedValue\n\t\t\t}\n\t\t}\n\t}']);
 
 function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
@@ -359,7 +359,7 @@ var App = function (_React$Component) {
       conversationId: "",
       // A Message Object consists of a message[, intent, date, isUser]
       messageObjectList: [],
-      discoveryNumber: 0
+      result: ""
     };
 
     _this.handleSubmit = _this.handleSubmit.bind(_this);
@@ -459,9 +459,17 @@ var App = function (_React$Component) {
   }, {
     key: 'formatProducts',
     value: function formatProducts(conversationId) {
+      console.log("rendering products");
       this.props.dxContext.conversationId = conversationId;
+      console.log(window.cxs);
+      if (window.cxs !== undefined) {
+        this.props.dxContext.profileId = window.cxs.profileId;
+      }
+
       var formattedResult = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ProductList_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], { dxContext: this.props.dxContext });
-      this.addMessage({ message: formattedResult });
+      this.setState({
+        result: formattedResult
+      });
     }
   }, {
     key: 'render',
@@ -469,15 +477,15 @@ var App = function (_React$Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
         'div',
         { className: 'app-wrapper' },
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-          'p',
-          { className: 'conversation__intro' },
-          'Watson Assistant :'
-        ),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Conversation_js__WEBPACK_IMPORTED_MODULE_1__["default"], {
           onSubmit: this.handleSubmit,
           messageObjectList: this.state.messageObjectList
-        })
+        }),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+          'div',
+          { className: 'watson_result' },
+          this.state.result
+        )
       );
     }
   }]);
@@ -851,14 +859,14 @@ var Products = function (_React$Component) {
 
 			return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
 				react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Grid"],
-				{ className: "product-container" },
+				{ className: "product-container", fluid: true },
 				react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
 					react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Row"],
 					{ className: "product-row" },
 					prods.map(function (prod) {
 						return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
 							react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Col"],
-							{ xs: 6, md: 4, lg: 3 },
+							{ xs: 6, md: 4, lg: 4 },
 							react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
 								"div",
 								{ className: "product-card" },
@@ -927,7 +935,8 @@ var ProductsQuery = Object(react_apollo_index__WEBPACK_IMPORTED_MODULE_2__["grap
 	options: function options(props) {
 		return {
 			variables: {
-				"conversationId": props.dxContext.conversationId
+				"conversationId": props.dxContext.conversationId,
+				"profileId": props.dxContext.profileId
 			}
 		};
 	}
@@ -944,7 +953,7 @@ var ProductsQuery = Object(react_apollo_index__WEBPACK_IMPORTED_MODULE_2__["grap
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\workspaces\jahia2\dx-react-starter\src\main\javascript\app\test\main.jsx */"./src/main/javascript/app/test/main.jsx");
+module.exports = __webpack_require__(/*! /Users/rincevent/projects/modules/cio-chatbot/src/main/javascript/app/test/main.jsx */"./src/main/javascript/app/test/main.jsx");
 
 
 /***/ })
