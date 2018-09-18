@@ -26,11 +26,12 @@ class Products extends React.Component {
             }
         }
         this.state = {
+            hasGrantedConsent : grantedConsent,
             consentText       : (grantedConsent ? "You have consented to the usage of your email to receive information about product out of stock." : "You have not consented to the usage of your email to receive information about product out of stock."),
             shouldDisplayModal: displayModal
         };
         var $this  = this;
-        if (window.manageWemPrivacy !== undefined && displayModal) {
+        if (window.manageWemPrivacy !== undefined) {
             let privacyHandler      = {
                 set: function (obj, prop, value) {
                     console.log("calling proxy setter", prop, value);
@@ -47,6 +48,7 @@ class Products extends React.Component {
                                         consentText = "You have consented to the usage of your email to receive information about product out of stock.";
                                     }
                                     $this.setState({
+                                        hasGrantedConsent : consents["apparel-uk/outofstock"].status === "GRANTED",
                                         consentText       : consentText,
                                         shouldDisplayModal: false
                                     })
@@ -78,7 +80,8 @@ class Products extends React.Component {
         return <Grid className="product-container" fluid={true}>
             <Row className="product-row">
                 <Col xs={12} md={12} lg={12}>
-                    <p>{this.state.consentText}</p>
+                    <div
+                        className={this.state.hasGrantedConsent ? "alert alert-success" : "alert alert-warning"}>{this.state.consentText}</div>
                 </Col>
             </Row>
             <Row className="product-row">
