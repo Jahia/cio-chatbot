@@ -20,10 +20,49 @@ class App extends React.Component {
 
     componentDidMount() {
         // Todo: Call grapqhql entry point for favoriteColor (when window.cxs (CDP profile) is available). This will give context for the style.
-        this.callWatson('hello');
+		if (window.cxs != undefined && window.cxs.profileId != undefined) {
+            this.props.dxContext.profileId = window.cxs.profileId;
+			
+			this.getFavoriteColor(window.cxs.profileId).then((responseJson) => {
+            this.callWatson('hello',responseJson.data.favoriteColor);
+			}).catch(function (error) {
+				throw error;
+			});
+			
+        } else{
+			this.callWatson('hello');
+		}
+		
+		
+        
     }
+	
+	getFavoriteColor(profileId){
+		return fetch(this.props.dxContext.servletContext + '/modules/graphql',
+            {
+                method : 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body   : JSON.stringify({
+                        query    : `query ($profileId: String!){
+							favoriteColor(profileId:$profileId)	
+						}`,
+                        variables: {
+                            profileId       : profileId
+                        }
+                    }
+                )
+            }).then((response) => {
+            if (!response.ok) {
+                return reject(response);
+            }
 
-    callWatson(message) {
+            return response.json();
+        });
+	}
+
+    callWatson(message,favoriteColor) {
 
         fetch(this.props.dxContext.servletContext + '/modules/graphql',
             {
@@ -32,8 +71,8 @@ class App extends React.Component {
                     'Content-Type': 'application/json'
                 },
                 body   : JSON.stringify({
-                        query    : `query ($message: String!,$conversationId : String){
-		sendMessage(message:$message, conversationId:$conversationId){
+                        query    : `query ($message: String!,$conversationId : String,$favoriteColor : String){
+		sendMessage(message:$message, conversationId:$conversationId,favoriteColor:$favoriteColor){
 			conversationId
 			entities{
 				name
@@ -47,7 +86,8 @@ class App extends React.Component {
 	}`,
                         variables: {
                             message       : message,
-                            conversationId: this.state.conversationId
+                            conversationId: this.state.conversationId,
+							favoriteColor: favoriteColor
                         }
                     }
                 )
@@ -68,7 +108,7 @@ class App extends React.Component {
 
     handleResponse(responseJson) {
         const outputMessage        = responseJson.outputMessages.filter(text => text).join('\n');
-        const outputIntent         = responseJson.intents[0];
+ /*        const outputIntent         = responseJson.intents[0]; */
         const outputDate           = responseJson.date.toLocaleTimeString();
         const outputConversationId = responseJson.conversationId;
         this.setState({
@@ -76,7 +116,7 @@ class App extends React.Component {
         });
         const msgObj = {
             position: 'left',
-            label   : outputIntent,
+/*             label   : outputIntent, */
             message : outputMessage,
             date    : outputDate,
             hasTail : true

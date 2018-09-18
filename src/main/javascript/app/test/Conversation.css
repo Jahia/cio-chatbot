@@ -18,7 +18,6 @@
 }
 .conversation__messages {
   overflow-y: auto;
-  flex: 1;
 }
 .conversation__input-container {
   width: 100%;

@@ -83,10 +83,10 @@ public class InputConfigBuilder {
 		}
 	}
 	
-	private inputVariant getInputVariant(String value) {
+	private inputVariantConfig getInputVariant(String value) {
 		ObjectMapper om=new ObjectMapper();
 		try {
-			return om.readValue(value, inputVariant.class);
+			return om.readValue(value, inputVariantConfig.class);
 		} catch (IOException e) {
 			LOGGER.error(e);
 			return null;

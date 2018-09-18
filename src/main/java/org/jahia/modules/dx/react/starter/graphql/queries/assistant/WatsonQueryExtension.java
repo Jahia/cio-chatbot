@@ -18,9 +18,10 @@ public class WatsonQueryExtension {
 
 	@GraphQLField
 	public static WatsonResponse sendMessage(@GraphQLNonNull @GraphQLName("message") String message,
-			@GraphQLDescription("id of conversation sent in the response") @GraphQLName("conversationId") String conversationId) {
+			@GraphQLDescription("id of conversation sent in the response") @GraphQLName("conversationId") String conversationId,
+			@GraphQLDescription("favoriteColor (when window.cxs (CDP profile) is available)") @GraphQLName("favoriteColor") String favoriteColor) {
 
-		MessageResponse messageResponse = WatsonAssistant.sendMessage(message, conversationId);
+		MessageResponse messageResponse = WatsonAssistant.sendMessage(message, conversationId,favoriteColor);
 		WatsonResponse response = WatsonResponse.getResponse(messageResponse);
 		return response;
 	}
