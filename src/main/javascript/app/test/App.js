@@ -2,7 +2,6 @@ import React from 'react';
 import Conversation from './Conversation.js';
 import './App.css';
 import ProductList from './ProductList.jsx';
-import gqlQueries from "../gqlQueries";
 
 class App extends React.Component {
     constructor(props) {
@@ -20,25 +19,23 @@ class App extends React.Component {
 
     componentDidMount() {
         // Todo: Call grapqhql entry point for favoriteColor (when window.cxs (CDP profile) is available). This will give context for the style.
-		if (window.cxs != undefined && window.cxs.profileId != undefined) {
+        if (window.cxs !== undefined && window.cxs.profileId !== undefined) {
             this.props.dxContext.profileId = window.cxs.profileId;
-			
-			this.getFavoriteColor(window.cxs.profileId).then((responseJson) => {
-            this.callWatson('hello',responseJson.data.favoriteColor);
-			}).catch(function (error) {
-				throw error;
-			});
-			
-        } else{
-			this.callWatson('hello');
-		}
-		
-		
-        
+
+            this.getFavoriteColor(window.cxs.profileId).then((responseJson) => {
+                this.callWatson('hello', responseJson.data.favoriteColor);
+            }).catch(function (error) {
+                throw error;
+            });
+
+        } else {
+            this.callWatson('hello');
+        }
+
     }
-	
-	getFavoriteColor(profileId){
-		return fetch(this.props.dxContext.servletContext + '/modules/graphql',
+
+    getFavoriteColor(profileId) {
+        return fetch(this.props.dxContext.servletContext + '/modules/graphql',
             {
                 method : 'POST',
                 headers: {
@@ -49,7 +46,7 @@ class App extends React.Component {
 							favoriteColor(profileId:$profileId)	
 						}`,
                         variables: {
-                            profileId       : profileId
+                            profileId: profileId
                         }
                     }
                 )
@@ -60,9 +57,9 @@ class App extends React.Component {
 
             return response.json();
         });
-	}
+    }
 
-    callWatson(message,favoriteColor) {
+    callWatson(message, favoriteColor) {
 
         fetch(this.props.dxContext.servletContext + '/modules/graphql',
             {
@@ -87,7 +84,7 @@ class App extends React.Component {
                         variables: {
                             message       : message,
                             conversationId: this.state.conversationId,
-							favoriteColor: favoriteColor
+                            favoriteColor : favoriteColor
                         }
                     }
                 )
@@ -107,8 +104,8 @@ class App extends React.Component {
     }
 
     handleResponse(responseJson) {
-        const outputMessage        = responseJson.outputMessages.filter(text => text).join('\n');
- /*        const outputIntent         = responseJson.intents[0]; */
+        const outputMessage = responseJson.outputMessages.filter(text => text).join('\n');
+        /*        const outputIntent         = responseJson.intents[0]; */
         const outputDate           = responseJson.date.toLocaleTimeString();
         const outputConversationId = responseJson.conversationId;
         this.setState({
@@ -116,7 +113,7 @@ class App extends React.Component {
         });
         const msgObj = {
             position: 'left',
-/*             label   : outputIntent, */
+            /*             label   : outputIntent, */
             message : outputMessage,
             date    : outputDate,
             hasTail : true
