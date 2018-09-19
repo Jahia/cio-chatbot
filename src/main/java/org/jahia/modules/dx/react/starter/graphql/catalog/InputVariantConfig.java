@@ -1,6 +1,6 @@
 package org.jahia.modules.dx.react.starter.graphql.catalog;
 
-public class inputVariantConfig {
+public class InputVariantConfig {
 	private String name;
 	private String value;
 	public String getName() {

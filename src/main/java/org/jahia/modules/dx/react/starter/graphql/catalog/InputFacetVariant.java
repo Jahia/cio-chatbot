@@ -20,7 +20,7 @@ public class InputFacetVariant {
 		this.selectedVariants = selectedVariants;
 	}
 	
-	public void addInputVariant(inputVariantConfig input) {
+	public void addInputVariant(InputVariantConfig input) {
 		Optional<InputVariant> opInputVariant = getInputVariant(input.getName());
 		InputVariant newInputVariant;
 		if(opInputVariant.isPresent()) {
