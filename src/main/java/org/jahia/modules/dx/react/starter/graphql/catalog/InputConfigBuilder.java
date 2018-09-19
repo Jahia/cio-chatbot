@@ -1,6 +1,7 @@
 package org.jahia.modules.dx.react.starter.graphql.catalog;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,10 +20,10 @@ public class InputConfigBuilder {
 	private List<EntityConfig> configs;
 	private InputConfig inputConfig = new InputConfig();
 	private InputPriceFilter priceFilter = new InputPriceFilter();
+	private String category;
 	private static final String DEFAULT_QUERY_CATEGORY =  "/brands";
-	private static final String QUERY_CATEGORY = "${category}";
 	private static final String VALUE = "${value}";
-	private String query = "query productList($config: InputFacetConfig, $priceFilter: InputPriceFilter) { cioProducts(connection: \"commio01\", index: \"apparelukfull_alias_en\", category: \""+QUERY_CATEGORY+"\", limit: ${limit}, offset: ${offset}, config: $config,priceFilter:$priceFilter) {" + 
+	private String query = "query productList($config: InputFacetConfig, $priceFilter: InputPriceFilter,$category: String!) { cioProducts(connection: \"commio01\", index: \"apparelukfull_alias_en\", category: $category, limit: ${limit}, offset: ${offset}, config: $config,priceFilter:$priceFilter) {" + 
 			"	sku" + 
 			"	name" + 
 			"	mountedPath" + 
@@ -45,30 +46,43 @@ public class InputConfigBuilder {
 	}
 
 	private void addEntity(Map<String, Object> entities, EntityConfig entityConfig) {
-		if (entities.get(entityConfig.getEntity()) != null) {
-			String entityValue = entities.get(entityConfig.getEntity()).toString();
-			RequestPosition position = entityConfig.getRequestPosition();
+		if (entities.get(entityConfig.getEntity()) == null) {
+			return;
+		}
+
+		List<String> entityValues = new ArrayList<>();
+		if (entities.get(entityConfig.getEntity()) instanceof List) {
+			((List<Object>) entities.get(entityConfig.getEntity())).stream()
+					.forEach(value -> entityValues.add(value.toString()));
+		} else {
+			entityValues.add(entities.get(entityConfig.getEntity()).toString());
+		}
+
+		RequestPosition position = entityConfig.getRequestPosition();
+		for (String entityValue : entityValues) {
 			String value = entityConfig.getValue().replace(VALUE, entityValue);
-			if(position.equals(RequestPosition.categoryUrl)&&!query.contains(QUERY_CATEGORY)) {
+			if (position.equals(RequestPosition.categoryUrl) && category!=null) {
 				position = entityConfig.getRequestPosition2();
 				value = entityConfig.getValue2().replace(VALUE, entityValue);
 			}
 
 			switch (position) {
 			case categoryUrl:
-				query = query.replace(QUERY_CATEGORY, value);
+				category = value;
 				break;
 			case configSelectedCategories:
-				inputConfig.getFacets().getShopByCategory().addInputVariant(getInputVariant(value));
+				inputConfig.getFacets().getShopByCategory().addInputVariant(getInputVariantConfig(value));
+
 				break;
 			case configSelectedVariants:
-				inputConfig.getFacets().getShopByVariants().addInputVariant(getInputVariant(value));
+				inputConfig.getFacets().getShopByVariants().addInputVariant(getInputVariantConfig(value));
+
 				break;
 			case search:
-				if(StringUtils.isEmpty(inputConfig.getSearch())) {
+				if (StringUtils.isEmpty(inputConfig.getSearch())) {
 					inputConfig.setSearch(value);
-				}else {
-					inputConfig.setSearch(inputConfig.getSearch().concat(" "+ value));
+				} else {
+					inputConfig.setSearch(inputConfig.getSearch().concat(" " + value));
 				}
 				break;
 			case lowerBound:
@@ -83,7 +97,7 @@ public class InputConfigBuilder {
 		}
 	}
 	
-	private InputVariantConfig getInputVariant(String value) {
+	private InputVariantConfig getInputVariantConfig(String value) {
 		ObjectMapper om=new ObjectMapper();
 		try {
 			return om.readValue(value, InputVariantConfig.class);
@@ -92,20 +106,18 @@ public class InputConfigBuilder {
 			return null;
 		}
 	}
-
+	
 	public Map<String, Object> getInputVariables() {
 		Map<String, Object> inputConfigs=new HashMap<>();
 		inputConfigs.put("priceFilter", priceFilter);
 		inputConfigs.put("config", inputConfig);
+		inputConfigs.put("category", category!=null?category:DEFAULT_QUERY_CATEGORY);
 		return inputConfigs;
 	}
 	
 	
 	
 	public String getQuery() {
-		if(query.contains(QUERY_CATEGORY)) {
-			query = query.replace(QUERY_CATEGORY, DEFAULT_QUERY_CATEGORY);
-		}
 		return query;
 	}
 }

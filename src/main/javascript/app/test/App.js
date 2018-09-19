@@ -132,6 +132,9 @@ class App extends React.Component {
 
     handleSubmit(e) {
         const inputMessage  = e.target.value;
+		if(e.target.value ==""){
+			return;
+		}
         const inputDate     = new Date();
         const formattedDate = inputDate.toLocaleTimeString();
         const msgObj        = {

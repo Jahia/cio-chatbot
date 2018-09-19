@@ -1,6 +1,6 @@
 {
 	"configs": [{
-		"entity": "collections",
+		"entity": "collection",
 		"requestPosition": "categoryUrl",
 		"value": "/collections/${value}"
 	},
@@ -22,7 +22,7 @@
 		"value": "{\"name\": \"style\",\"value\": \"${value}\"}"
 	},
 	{
-		"entity": "sexe",
+		"entity": "gender",
 		"requestPosition": "search",
 		"value": "${value}"
 	},
