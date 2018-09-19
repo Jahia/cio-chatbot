@@ -1,18 +1,21 @@
 package org.jahia.modules.dx.react.starter.graphql.catalog;
 
-public class inputVariant {
+import java.util.List;
+
+public class InputVariant {
 	private String name;
-	private String value;
+	private List<String> value;
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getValue() {
+	public List<String> getValue() {
 		return value;
 	}
-	public void setValue(String value) {
+	public void setValue(List<String> value) {
 		this.value = value;
 	}
+	
 }
