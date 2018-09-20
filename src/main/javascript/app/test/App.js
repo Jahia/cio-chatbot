@@ -15,6 +15,7 @@ class App extends React.Component {
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleRestart = this.handleRestart.bind(this);
     }
 
     componentDidMount() {
@@ -170,12 +171,23 @@ class App extends React.Component {
             result: formattedResult
         });
     }
+	
+	handleRestart(){
+		this.setState({
+            conversationId   : "",
+            // A Message Object consists of a message[, intent, date, isUser]
+            messageObjectList: [],
+            result           : ""
+        });
+		this.componentDidMount();
+	}
 
     render() {
         return (
             <div className="app-wrapper">
                 <Conversation
                     onSubmit={this.handleSubmit}
+					onRestart={this.handleRestart}
                     messageObjectList={this.state.messageObjectList}
                 />
                 <div className="watson_result">

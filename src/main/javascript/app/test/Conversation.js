@@ -27,6 +27,7 @@ function Conversation(props) {
       </div>
       <div className="conversation__input-container">
         <InputWithButton className="conversation__input" onSubmit={props.onSubmit} placeholder="Say something to Watson."/>
+		<button onClick={props.onRestart} >Restart</button>
       </div>
       <div className="conversation__disclaimer--message">
         <h6 className="base--h6" >
