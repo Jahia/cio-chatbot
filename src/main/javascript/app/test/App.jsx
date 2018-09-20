@@ -174,9 +174,6 @@ class App extends React.Component {
             conversationId   : "",
             // A Message Object consists of a message[, intent, date, isUser]
             messageObjectList: [],
-            result           : []
-        });
-		this.componentDidMount();
             result           : ""
         }, function () {
 			this.componentDidMount();

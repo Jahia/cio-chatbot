@@ -414,8 +414,9 @@ var App = function (_React$Component) {
                 profileId: null,
                 // A Message Object consists of a message[, intent, date, isUser]
                 messageObjectList: []
+            }, function () {
+                this.componentDidMount();
             });
-            this.componentDidMount();
         }
     }, {
         key: 'render',

@@ -5,6 +5,7 @@
     margin: 5px 3px;
 }
 .watson_result{
+    padding-top: 10px;
     margin-left: 5px;
     display: flex;
     flex-direction: column;
@@ -185,7 +186,8 @@
 /*# sourceMappingURL=Message.css.map */
 
 .product-container{
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .product-card{

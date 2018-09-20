@@ -169,15 +169,16 @@ class App extends React.Component {
         });
     }
 	
-	handleRestart(){
-		this.setState({
-            conversationId   : null,
-            profileId        : null,
+	handleRestart() {
+        this.setState({
+            conversationId: null,
+            profileId: null,
             // A Message Object consists of a message[, intent, date, isUser]
             messageObjectList: []
+        }, function () {
+            this.componentDidMount();
         });
-		this.componentDidMount();
-	}
+    }
 
     render() {
         return (
