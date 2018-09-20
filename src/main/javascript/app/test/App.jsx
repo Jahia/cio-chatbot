@@ -177,6 +177,10 @@ class App extends React.Component {
             result           : []
         });
 		this.componentDidMount();
+            result           : ""
+        }, function () {
+			this.componentDidMount();
+		});
 	}
 
     render() {
