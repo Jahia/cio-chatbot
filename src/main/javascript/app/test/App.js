@@ -178,8 +178,10 @@ class App extends React.Component {
             // A Message Object consists of a message[, intent, date, isUser]
             messageObjectList: [],
             result           : ""
-        });
-		this.componentDidMount();
+        }, function () {
+			this.componentDidMount();
+		});
+
 	}
 
     render() {
