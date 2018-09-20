@@ -56,7 +56,6 @@ public class CatalogQueryExtension {
         jsonObj.put("query", inputConfigBuilder.getQuery());
         jsonObj.put("variables", inputConfigBuilder.getInputVariables());
         String response = GraphQLCall.sendPost(jsonObj);
-        logger.info("We found {}",response);
         Map<String, Map<String, List<CioProduct>>> mapValue = om.readValue(response, new TypeReference<Map<String, Map<String, List<CioProduct>>>>() {
         });
         String favoriteColor = context.get("favoriteColor")!=null?context.get("favoriteColor").toString():"";
