@@ -1,17 +1,18 @@
 import React from 'react';
-import Conversation from './Conversation.js';
-import './App.css';
+import Conversation from './Conversation.jsx';
 import ProductList from './ProductList.jsx';
+import _ from 'lodash';
 
 class App extends React.Component {
+
     constructor(props) {
         super(props);
 
         this.state = {
-            conversationId   : "",
+            conversationId   : null,
+            profileId        : null,
             // A Message Object consists of a message[, intent, date, isUser]
-            messageObjectList: [],
-            result           : ""
+            messageObjectList: []
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -70,18 +71,18 @@ class App extends React.Component {
                 },
                 body   : JSON.stringify({
                         query    : `query ($message: String!,$conversationId : String,$favoriteColor : String){
-		sendMessage(message:$message, conversationId:$conversationId,favoriteColor:$favoriteColor){
-			conversationId
-			entities{
-				name
-				value
-				confidence
-			}
-			intents
-			outputMessages
-			canSearch
-		}
-	}`,
+                            sendMessage(message:$message, conversationId:$conversationId,favoriteColor:$favoriteColor){
+                                conversationId
+                                entities{
+                                    name
+                                    value
+                                    confidence
+                                }
+                                intents
+                                outputMessages
+                                canSearch
+                            }
+                        }`,
                         variables: {
                             message       : message,
                             conversationId: this.state.conversationId,
@@ -160,24 +161,20 @@ class App extends React.Component {
 
     formatProducts(conversationId) {
         console.log("rendering products");
-        this.props.dxContext.conversationId = conversationId;
-        console.log(window.cxs);
-        if (window.cxs !== undefined) {
-            this.props.dxContext.profileId = window.cxs.profileId;
-        }
 
-        const formattedResult = <ProductList dxContext={this.props.dxContext}/>
         this.setState({
-            result: formattedResult
+            conversationId    : conversationId,
+            profileId         : (!_.isUndefined(window.cxs) ? window.cxs.profileId : null),
+            messageObjectList : this.state.messageObjectList
         });
     }
 	
 	handleRestart(){
 		this.setState({
-            conversationId   : "",
+            conversationId   : null,
+            profileId        : null,
             // A Message Object consists of a message[, intent, date, isUser]
-            messageObjectList: [],
-            result           : ""
+            messageObjectList: []
         });
 		this.componentDidMount();
 	}
@@ -191,7 +188,9 @@ class App extends React.Component {
                     messageObjectList={this.state.messageObjectList}
                 />
                 <div className="watson_result">
-                    {this.state.result}
+                    <ProductList dxContext={this.props.dxContext}
+                                 conversationId={this.state.conversationId}
+                                 profileId={this.state.profileId}/>
                 </div>
             </div>
         );

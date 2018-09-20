@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        'testComponent' : [path.resolve(__dirname, 'src/main/javascript/app/test', 'main.jsx')]
+        'testComponent' : [path.resolve(__dirname, 'src/main/javascript/app/productbot', 'main.jsx')]
     },
 
     output: {

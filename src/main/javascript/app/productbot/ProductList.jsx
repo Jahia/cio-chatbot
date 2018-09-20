@@ -28,7 +28,7 @@ class ProductList extends React.Component {
         return <ApolloProvider client={client(this.props)}>
                         <DxContext.Provider value={dxContext}>
                             { _.isNil(conversationId) || _.isNil(profileId) ?
-                                (<span>Please type in your words to search products</span>)
+                                (<span style={{paddingTop:35, fontSize:69}}><i className="fas fa-box"></i></span>)
                                 :
                                 (<Products dxContext={dxContext}
                                            conversationId={conversationId}
