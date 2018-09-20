@@ -88,6 +88,7 @@ class Products extends React.Component {
                 {
                     prods.map((prod) => (
                         <Col xs={6} md={4} lg={4} key={prod.sku}>
+						<a href={"https://demo.commerceio.jahia.com" + prod.vanityUrl} target="_blank"> 
                             <div className="product-card">
                                 <div className="product">
                                     <Row className="product-row product-header">
@@ -112,6 +113,7 @@ class Products extends React.Component {
                                     </Row>
                                 </div>
                             </div>
+						</a>
                         </Col>
                     ))
                 }

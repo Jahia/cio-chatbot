@@ -13,9 +13,13 @@
 }
 
 .product-row{
-	min-height: 65px
+	min-height: 65px;
+}
+
+.product-row a{
+	color: inherit;
 }
 
 .product-name, .product-price{
-	margin-left: 5px
+	margin-left: 5px;
 }
