@@ -13,6 +13,7 @@ public class CioProduct {
 	private String vanityUrl;
 	private List<CioMedia> images;
 	private CioPrice price;
+	private boolean outOfStock;
 	
 	@GraphQLField
 	public String getCode() {
@@ -69,5 +70,12 @@ public class CioProduct {
 	}
 	public void setPrice(CioPrice price) {
 		this.price = price;
+	}
+	@GraphQLField
+	public boolean isOutOfStock() {
+		return outOfStock;
+	}
+	public void setOutOfStock(boolean outOfStock) {
+		this.outOfStock = outOfStock;
 	}
 }

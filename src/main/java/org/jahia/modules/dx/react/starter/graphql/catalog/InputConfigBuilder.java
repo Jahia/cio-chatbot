@@ -35,14 +35,15 @@ public class InputConfigBuilder {
 	
 	private String queryProductsInfo = "query productsInfo($config: InputFacetConfig,$productCodes : [String]) {"+
 		 " cioProductsInfo(siteKey: \"apparel-uk\", language: \"en\", productCodes:$productCodes, config:$config){"+
-			   " sku"+
-			   " vanityURL"+
-			"    variantsProductInfo{"+
-			"      sku"+
-			"      vanityURL"+
-			  "    options {"+
-			 "       qualifier"+
-			 "       value"+
+			"	sku"+
+			"	vanityURL"+
+			"	variantsProductInfo{"+
+			"	  sku"+
+			"	  vanityURL"+
+			"	  stockLevel"+
+			"	   options {"+
+			"	    qualifier"+
+			"	    value"+
 			"      }}}}";
 			
 	public InputConfigBuilder(List<EntityConfig> configs, int limit, int offset) {
@@ -136,9 +137,10 @@ public class InputConfigBuilder {
 		return inputConfigs;
 	}
 	
-	public boolean hasOneSize() {
+	public boolean hasSizeOrStyle() {
 		Optional<InputVariant> size = inputConfig.getFacets().getShopByVariants().getInputVariant("size");
-		return size.isPresent()&&size.get().getValue().size()==1;
+		Optional<InputVariant> style = inputConfig.getFacets().getShopByVariants().getInputVariant("style");
+		return (size.isPresent()&&size.get().getValue().size()>0)||(style.isPresent()&&style.get().getValue().size()>0);
 	}
 	
 	public String getQuery() {

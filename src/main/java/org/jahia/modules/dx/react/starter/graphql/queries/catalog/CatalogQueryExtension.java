@@ -17,6 +17,7 @@ import org.jahia.modules.dx.react.starter.graphql.GraphQLCall;
 import org.jahia.modules.dx.react.starter.graphql.catalog.CioProduct;
 import org.jahia.modules.dx.react.starter.graphql.catalog.CioProductsInfo;
 import org.jahia.modules.dx.react.starter.graphql.catalog.InputConfigBuilder;
+import org.jahia.modules.dx.react.starter.graphql.catalog.VariantsProductInfo;
 import org.jahia.modules.graphql.provider.dxm.DXGraphQLProvider;
 import org.jahia.modules.marketingfactory.admin.ContextServerService;
 import org.jahia.osgi.BundleUtils;
@@ -73,9 +74,6 @@ public class CatalogQueryExtension {
     }
     
     private static void fillSpecificUrl(InputConfigBuilder inputConfigBuilder,List<CioProduct> products) throws Exception{
-    	if(!inputConfigBuilder.hasOneSize()) {
-    		return;
-    	}
     	List<String> sku = products.stream().map(product -> product.getSku()).collect(Collectors.toList());
     	Map<String, Object> jsonObj = new HashMap<>();
         jsonObj.put("query", inputConfigBuilder.getQueryProductsInfo());
@@ -84,18 +82,31 @@ public class CatalogQueryExtension {
         Map<String, Map<String, List<CioProductsInfo>>> mapValue = om.readValue(response, new TypeReference<Map<String, Map<String, List<CioProductsInfo>>>>() {
         });
         List<CioProductsInfo> productsInfo = mapValue.get("data").get("cioProductsInfo");
-        fillSpecificUrl(products, productsInfo);
-    	
+        fillSpecificProducts(inputConfigBuilder,products, productsInfo);
     }
     
-    private static void fillSpecificUrl(List<CioProduct> products,List<CioProductsInfo> productsInfo) {
+    private static void fillSpecificProducts(InputConfigBuilder inputConfigBuilder,List<CioProduct> products,List<CioProductsInfo> productsInfo) {
     	products.forEach(product->{
-    		Optional<CioProductsInfo> pInfo= productsInfo.stream().filter(productInfo-> product.getSku().equals(productInfo.getSku())).findAny();
-    		if(pInfo.isPresent()&&pInfo.get().getVariantsProductInfo().size()==1) {
-    			product.setVanityUrl(pInfo.get().getVariantsProductInfo().get(0).getVanityURL());
-    		}
+    		fillSpecificProduct(inputConfigBuilder,productsInfo, product);
     	});
     }
+
+	private static void fillSpecificProduct(InputConfigBuilder inputConfigBuilder,List<CioProductsInfo> productsInfo, CioProduct product) {
+		Optional<CioProductsInfo> pInfo= productsInfo.stream().filter(productInfo-> product.getSku().equals(productInfo.getSku())).findAny();
+		if(pInfo.isPresent()){
+			Optional<VariantsProductInfo> variant = pInfo.get().getVariantsProductInfo().stream().filter(variantInfo->variantInfo.getStockLevel()>0).findAny();
+			if(variant.isPresent()) {
+				if(inputConfigBuilder.hasSizeOrStyle()) {
+					product.setVanityUrl(variant.get().getVanityURL());
+				}
+				product.setOutOfStock(false);
+			}else {
+				product.setOutOfStock(true);
+			}
+		}else {
+			product.setOutOfStock(true);
+		}
+	}
 
     @GraphQLField
     public static String getFavoriteColor(@GraphQLNonNull@GraphQLName("profileId") String profileId) throws Exception {

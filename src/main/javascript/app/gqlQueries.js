@@ -33,6 +33,7 @@ const gqlQueries = {
 			mountedPath
 			vanityUrl
 			code
+			outOfStock
 			images {
 			  altText
 			  format
