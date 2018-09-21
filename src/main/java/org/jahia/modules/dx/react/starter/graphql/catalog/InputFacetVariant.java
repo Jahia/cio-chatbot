@@ -34,7 +34,7 @@ public class InputFacetVariant {
 		newInputVariant.getValue().add(input.getValue());
 	}
 	
-	private Optional<InputVariant> getInputVariant(String name) {
+	public Optional<InputVariant> getInputVariant(String name) {
 		return selectedVariants.stream().filter(element -> element.getName().equals(name)).findFirst();
 	}
 }

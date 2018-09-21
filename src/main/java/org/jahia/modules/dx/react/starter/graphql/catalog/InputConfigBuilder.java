@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -31,7 +32,19 @@ public class InputConfigBuilder {
 			"	images{url}"+
 			"	price{formattedValue}"+
 			"	code}}";
-
+	
+	private String queryProductsInfo = "query productsInfo($config: InputFacetConfig,$productCodes : [String]) {"+
+		 " cioProductsInfo(siteKey: \"apparel-uk\", language: \"en\", productCodes:$productCodes, config:$config){"+
+			   " sku"+
+			   " vanityURL"+
+			"    variantsProductInfo{"+
+			"      sku"+
+			"      vanityURL"+
+			  "    options {"+
+			 "       qualifier"+
+			 "       value"+
+			"      }}}}";
+			
 	public InputConfigBuilder(List<EntityConfig> configs, int limit, int offset) {
 		this.configs = configs;
 		query = query.replace("${limit}", Integer.toString(limit));
@@ -115,9 +128,24 @@ public class InputConfigBuilder {
 		return inputConfigs;
 	}
 	
+	public Map<String, Object> getInputProductsInfo(List<String> productCodes) {
+		Map<String, Object> inputConfigs = new HashMap<>();
+		inputConfigs.put("config", inputConfig);
+		inputConfigs.put("productCodes", productCodes);
+		
+		return inputConfigs;
+	}
 	
+	public boolean hasOneSize() {
+		Optional<InputVariant> size = inputConfig.getFacets().getShopByVariants().getInputVariant("size");
+		return size.isPresent()&&size.get().getValue().size()==1;
+	}
 	
 	public String getQuery() {
 		return query;
+	}
+
+	public String getQueryProductsInfo() {
+		return queryProductsInfo;
 	}
 }

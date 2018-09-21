@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.jcr.AccessDeniedException;
 
@@ -13,6 +15,7 @@ import org.jahia.modules.dx.react.starter.assistant.WatsonAssistant;
 import org.jahia.modules.dx.react.starter.assistant.config.EntitiesConfigService;
 import org.jahia.modules.dx.react.starter.graphql.GraphQLCall;
 import org.jahia.modules.dx.react.starter.graphql.catalog.CioProduct;
+import org.jahia.modules.dx.react.starter.graphql.catalog.CioProductsInfo;
 import org.jahia.modules.dx.react.starter.graphql.catalog.InputConfigBuilder;
 import org.jahia.modules.graphql.provider.dxm.DXGraphQLProvider;
 import org.jahia.modules.marketingfactory.admin.ContextServerService;
@@ -64,7 +67,34 @@ public class CatalogQueryExtension {
 					conversationId);
 			saveFavoriteColor(favoriteColor, profileId, om);
 		}
-        return mapValue.get("data").get("cioProducts");
+		List<CioProduct> products = mapValue.get("data").get("cioProducts");
+		fillSpecificUrl(inputConfigBuilder, products);
+        return products;
+    }
+    
+    private static void fillSpecificUrl(InputConfigBuilder inputConfigBuilder,List<CioProduct> products) throws Exception{
+    	if(!inputConfigBuilder.hasOneSize()) {
+    		return;
+    	}
+    	List<String> sku = products.stream().map(product -> product.getSku()).collect(Collectors.toList());
+    	Map<String, Object> jsonObj = new HashMap<>();
+        jsonObj.put("query", inputConfigBuilder.getQueryProductsInfo());
+        jsonObj.put("variables", inputConfigBuilder.getInputProductsInfo(sku));
+        String response = GraphQLCall.sendPost(jsonObj);
+        Map<String, Map<String, List<CioProductsInfo>>> mapValue = om.readValue(response, new TypeReference<Map<String, Map<String, List<CioProductsInfo>>>>() {
+        });
+        List<CioProductsInfo> productsInfo = mapValue.get("data").get("cioProductsInfo");
+        fillSpecificUrl(products, productsInfo);
+    	
+    }
+    
+    private static void fillSpecificUrl(List<CioProduct> products,List<CioProductsInfo> productsInfo) {
+    	products.forEach(product->{
+    		Optional<CioProductsInfo> pInfo= productsInfo.stream().filter(productInfo-> product.getSku().equals(productInfo.getSku())).findAny();
+    		if(pInfo.isPresent()&&pInfo.get().getVariantsProductInfo().size()==1) {
+    			product.setVanityUrl(pInfo.get().getVariantsProductInfo().get(0).getVanityURL());
+    		}
+    	});
     }
 
     @GraphQLField
