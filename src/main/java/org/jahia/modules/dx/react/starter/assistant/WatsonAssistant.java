@@ -13,7 +13,7 @@ import com.ibm.watson.developer_cloud.assistant.v1.model.MessageResponse;
 
 public class WatsonAssistant {
 	private static Assistant service = new Assistant("2018-02-16");
-	private static String workspaceId = "33b36b04-8937-41a6-afeb-d17eb6bacac6";
+	private static String workspaceId = "a24131a9-a13f-441c-89f6-8ab38053de8d";
 	
 	private static Map<String, Context> contexts=new HashMap<>();
 
