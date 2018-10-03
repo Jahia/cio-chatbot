@@ -62,6 +62,23 @@ class Products extends React.Component {
         }
     }
 
+    componentWillReceiveProps(newProps) {
+        if (!newProps.fetchProducts.loading) {
+            const prods = newProps.fetchProducts.products ? newProps.fetchProducts.products : [];
+            const prodIndex = prods.findIndex(function(prod){
+                return prod.outOfStock;
+            });
+            if(prodIndex > -1){
+                console.log(prods[prodIndex]);
+                this.setState({
+                    dxContexts: {
+                        askEmail : true
+                    }
+                });
+            }
+        }
+    }
+
     render() {
 
         if (this.props.fetchProducts.error) {
@@ -70,11 +87,11 @@ class Products extends React.Component {
 
         const prods = this.props.fetchProducts.products ? this.props.fetchProducts.products : [];
 
-        if (this.state.shouldDisplayModal && window.manageWemPrivacyInstances !== undefined) {
-            let privacyInstance          = window.manageWemPrivacyInstances[Object.keys(window.manageWemPrivacyInstances)[0]];
-            privacyInstance.captiveModal = true;
-            privacyInstance.openModal(true);
-        }
+        // if (this.state.shouldDisplayModal && window.manageWemPrivacyInstances !== undefined) {
+        //     let privacyInstance          = window.manageWemPrivacyInstances[Object.keys(window.manageWemPrivacyInstances)[0]];
+        //     privacyInstance.captiveModal = true;
+        //     privacyInstance.openModal(true);
+        // }
 
         return <Grid className="product-container" fluid={true}>
             <Row className="product-row">
@@ -105,7 +122,7 @@ class Products extends React.Component {
                                     <Row className="product-row">
                                         <div className="product-name-wrapper">
                                             <Col xs={12} className="product-name">
-                                                <span>{prod.name}</span>
+                                                <span>{prod.name} {prod.outOfStock ? "Out Of Stock" : ""}</span>
                                             </Col>
                                             <Col xs={12} className="product-price">
                                                 <span>{prod.price.formattedValue}</span>
