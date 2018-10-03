@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1537545002037
-Build-Jdk: 1.8.0_171
-Built-By: chooliyip
+Bnd-LastModified: 1538557929512
+Build-Jdk: 1.8.0_181
+Built-By: rincevent
 Bundle-Category: jahia-module
 Bundle-ClassPath: .,assistant-6.5.0.jar,core-6.5.0.jar,okhttp-3.11.0.jar
  ,okio-1.14.0.jar,logging-interceptor-3.11.0.jar,okhttp-urlconnection-3.
@@ -41,22 +41,22 @@ Import-Package: javax.jcr;version="[2.0,3)",org.apache.commons.lang;vers
  g.jahia.modules.graphql.provider.dxm;version="[1.0,2)",org.jahia.module
  s.marketingfactory.admin;version="[1.9,2)",org.jahia.osgi,org.jahia.reg
  istries,org.jahia.services.usermanager,org.json,org.osgi.framework;vers
- ion="[1.8,2)",org.slf4j;version="[1.7,2)",org.apache.taglibs.standard.t
- ag.rt.core,org.jahia.utils,javax.servlet.http;version="[3.0,4)",org.jah
- ia.services.render,org.jahia.taglibs.jcr.query;version="[7.2,8)",org.ja
- hia.taglibs.template.layoutmanager;version="[7.2,8)",org.jahia.taglibs.
- query;version="[7.2,8)",org.apache.commons.id,org.jahia.data.viewhelper
- .principal,org.jahia.taglibs.jcr;version="[7.2,8)",org.jahia.taglibs;ve
- rsion="[7.2,8)",org.apache.naming.java,org.jahia.taglibs.user;version="
- [7.2,8)",org.apache.commons.lang.math;version="[2.6,3)",org.jahia.servi
- ces.content.nodetypes,org.apache.taglibs.standard.functions,org.jahia.s
- ervices,org.jahia.services.content,org.jahia.exceptions,org.jahia.tagli
- bs.jcr.node;version="[7.2,8)",org.jahia.taglibs.template.pager;version=
- "[7.2,8)",org.jahia.taglibs.template.gwt;version="[7.2,8)",org.jahia.ta
- glibs.template.include;version="[7.2,8)",org.apache.taglibs.standard.ta
- g.common.core,org.jahia.taglibs.functions;version="[7.2,8)",org.apache.
- taglibs.standard.tei,org.jahia.defaults.config.spring,org.jahia.service
- s.seo,org.jahia.taglibs.template;version="[7.2,8)"
+ ion="[1.8,2)",org.slf4j;version="[1.7,2)",org.jahia.taglibs.jcr.query;v
+ ersion="[7.2,8)",org.jahia.taglibs.template.include;version="[7.2,8)",o
+ rg.jahia.services,org.jahia.services.content,org.jahia.taglibs.jcr.node
+ ;version="[7.2,8)",org.jahia.defaults.config.spring,org.jahia.services.
+ content.nodetypes,org.jahia.data.viewhelper.principal,javax.servlet.htt
+ p;version="[3.0,4)",org.jahia.taglibs.template.gwt;version="[7.2,8)",or
+ g.jahia.taglibs.template.layoutmanager;version="[7.2,8)",org.jahia.tagl
+ ibs.template;version="[7.2,8)",org.apache.taglibs.standard.tag.rt.core,
+ org.apache.commons.id,org.apache.naming.java,org.jahia.exceptions,org.j
+ ahia.services.render,org.jahia.services.seo,org.apache.taglibs.standard
+ .functions,org.apache.commons.lang.math;version="[2.6,3)",org.jahia.tag
+ libs.jcr;version="[7.2,8)",org.jahia.taglibs.functions;version="[7.2,8)
+ ",org.jahia.taglibs.user;version="[7.2,8)",org.apache.taglibs.standard.
+ tag.common.core,org.jahia.taglibs;version="[7.2,8)",org.jahia.taglibs.t
+ emplate.pager;version="[7.2,8)",org.apache.taglibs.standard.tei,org.jah
+ ia.taglibs.query;version="[7.2,8)",org.jahia.utils
 Jahia-Depends: default
 Jahia-Download-Sources-Available: true
 Jahia-GroupId: org.jahia.modules
@@ -65,7 +65,7 @@ Jahia-Required-Version: 7.2.3.0
 Jahia-Source-Control-Connection: scm:dummy:uri
 Jahia-Source-Control-DeveloperConnection: scm:dummy:uri
 Jahia-Source-Control-Tag: HEAD
-Jahia-Source-Folders: /git/cio-chatbot
+Jahia-Source-Folders: /Users/rincevent/projects/modules/cio-chatbot
 Jahia-Static-Resources: /css,/icons,/images,/img,/javascript
 Originally-Created-By: Apache Maven Bundle Plugin
 Provide-Capability: com.jahia.services.content;nodetypes:List<String>="d

@@ -15,12 +15,23 @@ class App extends React.Component {
             messageObjectList: []
         };
 
-        this.handleSubmit = this.handleSubmit.bind(this);
-		this.handleRestart = this.handleRestart.bind(this);
+        this.handleSubmit  = this.handleSubmit.bind(this);
+        this.handleRestart = this.handleRestart.bind(this);
     }
 
     componentDidMount() {
         // Todo: Call grapqhql entry point for favoriteColor (when window.cxs (CDP profile) is available). This will give context for the style.
+        var $this = this;
+        var intervalWatson = setInterval(function () {
+            if (window.cxs !== undefined) {
+                clearInterval(intervalWatson);
+                $this.startWatson();
+            }
+        }, 100);
+
+    }
+
+    startWatson() {
         if (window.cxs !== undefined && window.cxs.profileId !== undefined) {
             this.props.dxContext.profileId = window.cxs.profileId;
 
@@ -30,13 +41,11 @@ class App extends React.Component {
                 throw error;
             });
 
-        } else {
-            this.callWatson('hello');
         }
-
     }
 
     getFavoriteColor(profileId) {
+        console.log(profileId);
         return fetch(this.props.dxContext.servletContext + '/modules/graphql',
             {
                 method : 'POST',
@@ -53,6 +62,7 @@ class App extends React.Component {
                     }
                 )
             }).then((response) => {
+            console.log(response);
             if (!response.ok) {
                 return reject(response);
             }
@@ -62,7 +72,7 @@ class App extends React.Component {
     }
 
     callWatson(message, favoriteColor) {
-
+        console.log("Calling watsion", favoriteColor)
         fetch(this.props.dxContext.servletContext + '/modules/graphql',
             {
                 method : 'POST',
@@ -133,10 +143,10 @@ class App extends React.Component {
     }
 
     handleSubmit(e) {
-        const inputMessage  = e.target.value;
-		if(e.target.value ==""){
-			return;
-		}
+        const inputMessage = e.target.value;
+        if (e.target.value == "") {
+            return;
+        }
         const inputDate     = new Date();
         const formattedDate = inputDate.toLocaleTimeString();
         const msgObj        = {
@@ -163,16 +173,16 @@ class App extends React.Component {
         console.log("rendering products");
 
         this.setState({
-            conversationId    : conversationId,
-            profileId         : (!_.isUndefined(window.cxs) ? window.cxs.profileId : null),
-            messageObjectList : this.state.messageObjectList
+            conversationId   : conversationId,
+            profileId        : (!_.isUndefined(window.cxs) ? window.cxs.profileId : null),
+            messageObjectList: this.state.messageObjectList
         });
     }
-	
-	handleRestart() {
+
+    handleRestart() {
         this.setState({
-            conversationId: null,
-            profileId: null,
+            conversationId   : null,
+            profileId        : null,
             // A Message Object consists of a message[, intent, date, isUser]
             messageObjectList: []
         }, function () {
@@ -185,7 +195,7 @@ class App extends React.Component {
             <div className="app-wrapper">
                 <Conversation
                     onSubmit={this.handleSubmit}
-					onRestart={this.handleRestart}
+                    onRestart={this.handleRestart}
                     messageObjectList={this.state.messageObjectList}
                 />
                 <div className="watson_result">

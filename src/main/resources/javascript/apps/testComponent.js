@@ -186,7 +186,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var graphql_tag__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! graphql-tag */ "./node_modules/graphql-tag/src/index.js");
 /* harmony import */ var graphql_tag__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(graphql_tag__WEBPACK_IMPORTED_MODULE_0__);
 var _templateObject = _taggedTemplateLiteral(['query Sites($path: String!){\n        jcr {\n            nodeByPath(path: $path) {\n              displayName  \n              name\n              path\n              children {\n                nodes {\n                  displayName\n                  name\n                }\n              }\n            }\n          }\n    }'], ['query Sites($path: String!){\n        jcr {\n            nodeByPath(path: $path) {\n              displayName  \n              name\n              path\n              children {\n                nodes {\n                  displayName\n                  name\n                }\n              }\n            }\n          }\n    }']),
-    _templateObject2 = _taggedTemplateLiteral(['query productList($conversationId : String!, $profileId : String) {\n\t\t  products(conversationId : $conversationId, limit:9, offset:0, profileId : $profileId ) {\n\t\t\tsku\n\t\t\tname\n\t\t\tmountedPath\n\t\t\tvanityUrl\n\t\t\tcode\n\t\t\timages {\n\t\t\t  altText\n\t\t\t  format\n\t\t\t  imageType\n\t\t\t  url\n\t\t\t}\n\t\t\tprice{\n\t\t\t\tformattedValue\n\t\t\t}\n\t\t}\n\t}'], ['query productList($conversationId : String!, $profileId : String) {\n\t\t  products(conversationId : $conversationId, limit:9, offset:0, profileId : $profileId ) {\n\t\t\tsku\n\t\t\tname\n\t\t\tmountedPath\n\t\t\tvanityUrl\n\t\t\tcode\n\t\t\timages {\n\t\t\t  altText\n\t\t\t  format\n\t\t\t  imageType\n\t\t\t  url\n\t\t\t}\n\t\t\tprice{\n\t\t\t\tformattedValue\n\t\t\t}\n\t\t}\n\t}']);
+    _templateObject2 = _taggedTemplateLiteral(['query productList($conversationId : String!, $profileId : String) {\n\t\t  products(conversationId : $conversationId, limit:9, offset:0, profileId : $profileId ) {\n\t\t\tsku\n\t\t\tname\n\t\t\tmountedPath\n\t\t\tvanityUrl\n\t\t\tcode\n\t\t\toutOfStock\n\t\t\timages {\n\t\t\t  altText\n\t\t\t  format\n\t\t\t  imageType\n\t\t\t  url\n\t\t\t}\n\t\t\tprice{\n\t\t\t\tformattedValue\n\t\t\t}\n\t\t}\n\t}'], ['query productList($conversationId : String!, $profileId : String) {\n\t\t  products(conversationId : $conversationId, limit:9, offset:0, profileId : $profileId ) {\n\t\t\tsku\n\t\t\tname\n\t\t\tmountedPath\n\t\t\tvanityUrl\n\t\t\tcode\n\t\t\toutOfStock\n\t\t\timages {\n\t\t\t  altText\n\t\t\t  format\n\t\t\t  imageType\n\t\t\t  url\n\t\t\t}\n\t\t\tprice{\n\t\t\t\tformattedValue\n\t\t\t}\n\t\t}\n\t}']);
 
 function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
@@ -265,9 +265,20 @@ var App = function (_React$Component) {
     _createClass(App, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
+            // Todo: Call grapqhql entry point for favoriteColor (when window.cxs (CDP profile) is available). This will give context for the style.
+            var $this = this;
+            var intervalWatson = setInterval(function () {
+                if (window.cxs !== undefined) {
+                    clearInterval(intervalWatson);
+                    $this.startWatson();
+                }
+            }, 100);
+        }
+    }, {
+        key: 'startWatson',
+        value: function startWatson() {
             var _this2 = this;
 
-            // Todo: Call grapqhql entry point for favoriteColor (when window.cxs (CDP profile) is available). This will give context for the style.
             if (window.cxs !== undefined && window.cxs.profileId !== undefined) {
                 this.props.dxContext.profileId = window.cxs.profileId;
 
@@ -276,13 +287,12 @@ var App = function (_React$Component) {
                 }).catch(function (error) {
                     throw error;
                 });
-            } else {
-                this.callWatson('hello');
             }
         }
     }, {
         key: 'getFavoriteColor',
         value: function getFavoriteColor(profileId) {
+            console.log(profileId);
             return fetch(this.props.dxContext.servletContext + '/modules/graphql', {
                 method: 'POST',
                 headers: {
@@ -295,6 +305,7 @@ var App = function (_React$Component) {
                     }
                 })
             }).then(function (response) {
+                console.log(response);
                 if (!response.ok) {
                     return reject(response);
                 }
@@ -307,6 +318,7 @@ var App = function (_React$Component) {
         value: function callWatson(message, favoriteColor) {
             var _this3 = this;
 
+            console.log("Calling watsion", favoriteColor);
             fetch(this.props.dxContext.servletContext + '/modules/graphql', {
                 method: 'POST',
                 headers: {
@@ -895,7 +907,7 @@ var ProductsQuery = Object(react_apollo_index__WEBPACK_IMPORTED_MODULE_2__["grap
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /git/cio-chatbot/src/main/javascript/app/productbot/main.jsx */"./src/main/javascript/app/productbot/main.jsx");
+module.exports = __webpack_require__(/*! /Users/rincevent/projects/modules/cio-chatbot/src/main/javascript/app/productbot/main.jsx */"./src/main/javascript/app/productbot/main.jsx");
 
 
 /***/ })
