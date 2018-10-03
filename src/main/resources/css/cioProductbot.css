@@ -15,8 +15,9 @@
     width: 580px;
     height: 590px;
     border-radius: 1em;
-    background-color: #000;
-    color: #fff;
+    background-color: #f1f1f1;
+    color: #000;
+    border: 3px solid #aaa;
 }
 .conversation__intro {
     text-align: center;
@@ -52,7 +53,6 @@
 }
 .conversation__messages {
     overflow-y: auto;
-    border-bottom: 2px solid #ccc;
     border-top: 2px solid #ccc;
     padding: 6px 8px;
     height: 505px;
@@ -68,7 +68,6 @@
     font-size: 14px;
     vertical-align: super;
     border: 2px solid #ccc;
-    border-top: 0px;
     height: 42px;
     font-weight: normal;
     padding-left: 5px;
@@ -93,7 +92,6 @@
     float: right;
     background-color: transparent;
     text-decoration: underline;
-    font-size: 12px;
 }
 
 /*# sourceMappingURL=Conversation.css.map */
@@ -111,7 +109,7 @@
     color: #fff;
     margin-top: 0.1rem;
     padding: 0.6rem;
-    width: fit-content;
+    width: -moz-fit-content;
 }
 .message--from-left .message__content {
     background-color: #af6ee8;
@@ -204,8 +202,17 @@
     width: 100%;
 }
 
+.product{
+    padding-top: 8px;
+    background-color: #fff;
+}
+
+.product-header{
+    display: none;
+}
+
 .product-row{
-    min-height: 65px;
+    min-height: 55px;
 }
 
 .product-row a{

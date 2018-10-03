@@ -21,7 +21,7 @@ function Conversation(props) {
     <div className="conversation">
         <div className="conversation__disclaimer--message">
             <i className="fas fa-comments"></i>
-            <button onClick={props.onRestart} ><i className="fas fa-sync-alt"></i>Restart</button>
+            <button onClick={props.onRestart} ><i className="fas fa-sync-alt"></i></button>
         </div>
 
       <div className="conversation__messages">

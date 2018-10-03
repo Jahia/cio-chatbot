@@ -488,8 +488,7 @@ function Conversation(props) {
       react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
         'button',
         { onClick: props.onRestart },
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement('i', { className: 'fas fa-sync-alt' }),
-        'Restart'
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement('i', { className: 'fas fa-sync-alt' })
       )
     ),
     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
