@@ -24,7 +24,7 @@ class ProductList extends React.Component {
 
     render() {
 		
-        let {dxContext, conversationId, profileId} = this.props;
+        let {dxContext, conversationId, profileId, watsonCall} = this.props;
         return <ApolloProvider client={client(this.props)}>
                         <DxContext.Provider value={dxContext}>
                             { _.isNil(conversationId) || _.isNil(profileId) ?
@@ -32,7 +32,7 @@ class ProductList extends React.Component {
                                 :
                                 (<Products dxContext={dxContext}
                                            conversationId={conversationId}
-                                           profileId={profileId}/>)
+                                           profileId={profileId} watsonCall={watsonCall}/>)
                             }
                         </DxContext.Provider>
                 </ApolloProvider>

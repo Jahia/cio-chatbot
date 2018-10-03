@@ -283,7 +283,7 @@ var App = function (_React$Component) {
                 this.props.dxContext.profileId = window.cxs.profileId;
 
                 this.getFavoriteColor(window.cxs.profileId).then(function (responseJson) {
-                    _this2.callWatson('hello', responseJson.data.favoriteColor);
+                    _this2.callWatson('hello', responseJson.data.favoriteColor, false);
                 }).catch(function (error) {
                     throw error;
                 });
@@ -315,10 +315,10 @@ var App = function (_React$Component) {
         }
     }, {
         key: 'callWatson',
-        value: function callWatson(message, favoriteColor) {
+        value: function callWatson(message, favoriteColor, askEmail) {
             var _this3 = this;
 
-            console.log("Calling watsion", favoriteColor);
+            console.log("Calling watson", favoriteColor);
             fetch(this.props.dxContext.servletContext + '/modules/graphql', {
                 method: 'POST',
                 headers: {
@@ -329,7 +329,8 @@ var App = function (_React$Component) {
                     variables: {
                         message: message,
                         conversationId: this.state.conversationId,
-                        favoriteColor: favoriteColor
+                        favoriteColor: favoriteColor,
+                        askEmail: askEmail
                     }
                 })
             }).then(function (response) {
@@ -410,7 +411,7 @@ var App = function (_React$Component) {
     }, {
         key: 'formatProducts',
         value: function formatProducts(conversationId) {
-            console.log("rendering products");
+            console.log("rendering products", this.state.messageObjectList);
 
             this.setState({
                 conversationId: conversationId,
@@ -635,7 +636,8 @@ var ProductList = function (_React$Component) {
             var _props = this.props,
                 dxContext = _props.dxContext,
                 conversationId = _props.conversationId,
-                profileId = _props.profileId;
+                profileId = _props.profileId,
+                watsonCall = _props.watsonCall;
 
             return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(
                 react_apollo__WEBPACK_IMPORTED_MODULE_3__["ApolloProvider"],
@@ -649,7 +651,7 @@ var ProductList = function (_React$Component) {
                         react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement('i', { className: 'fas fa-box' })
                     ) : react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_products_jsx__WEBPACK_IMPORTED_MODULE_5__["default"], { dxContext: dxContext,
                         conversationId: conversationId,
-                        profileId: profileId })
+                        profileId: profileId, watsonCall: watsonCall })
                 )
             );
         }
@@ -778,6 +780,24 @@ var Products = function (_React$Component) {
     }
 
     _createClass(Products, [{
+        key: "componentWillReceiveProps",
+        value: function componentWillReceiveProps(newProps) {
+            if (!newProps.fetchProducts.loading) {
+                var prods = newProps.fetchProducts.products ? newProps.fetchProducts.products : [];
+                var prodIndex = prods.findIndex(function (prod) {
+                    return prod.outOfStock;
+                });
+                if (prodIndex > -1) {
+                    console.log(prods[prodIndex]);
+                    this.setState({
+                        dxContexts: {
+                            askEmail: true
+                        }
+                    });
+                }
+            }
+        }
+    }, {
         key: "render",
         value: function render() {
 
@@ -787,11 +807,11 @@ var Products = function (_React$Component) {
 
             var prods = this.props.fetchProducts.products ? this.props.fetchProducts.products : [];
 
-            if (this.state.shouldDisplayModal && window.manageWemPrivacyInstances !== undefined) {
-                var privacyInstance = window.manageWemPrivacyInstances[Object.keys(window.manageWemPrivacyInstances)[0]];
-                privacyInstance.captiveModal = true;
-                privacyInstance.openModal(true);
-            }
+            // if (this.state.shouldDisplayModal && window.manageWemPrivacyInstances !== undefined) {
+            //     let privacyInstance          = window.manageWemPrivacyInstances[Object.keys(window.manageWemPrivacyInstances)[0]];
+            //     privacyInstance.captiveModal = true;
+            //     privacyInstance.openModal(true);
+            // }
 
             return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
                 react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Grid"],
@@ -857,7 +877,9 @@ var Products = function (_React$Component) {
                                                     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
                                                         "span",
                                                         null,
-                                                        prod.name
+                                                        prod.name,
+                                                        " ",
+                                                        prod.outOfStock ? "Out Of Stock" : ""
                                                     )
                                                 ),
                                                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(

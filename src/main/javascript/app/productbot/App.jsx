@@ -36,7 +36,7 @@ class App extends React.Component {
             this.props.dxContext.profileId = window.cxs.profileId;
 
             this.getFavoriteColor(window.cxs.profileId).then((responseJson) => {
-                this.callWatson('hello', responseJson.data.favoriteColor);
+                this.callWatson('hello', responseJson.data.favoriteColor, false);
             }).catch(function (error) {
                 throw error;
             });
@@ -71,8 +71,8 @@ class App extends React.Component {
         });
     }
 
-    callWatson(message, favoriteColor) {
-        console.log("Calling watsion", favoriteColor)
+    callWatson(message, favoriteColor, askEmail) {
+        console.log("Calling watson", favoriteColor);
         fetch(this.props.dxContext.servletContext + '/modules/graphql',
             {
                 method : 'POST',
@@ -96,7 +96,8 @@ class App extends React.Component {
                         variables: {
                             message       : message,
                             conversationId: this.state.conversationId,
-                            favoriteColor : favoriteColor
+                            favoriteColor : favoriteColor,
+                            askEmail : askEmail
                         }
                     }
                 )
@@ -170,7 +171,7 @@ class App extends React.Component {
     }
 
     formatProducts(conversationId) {
-        console.log("rendering products");
+        console.log("rendering products", this.state.messageObjectList);
 
         this.setState({
             conversationId   : conversationId,

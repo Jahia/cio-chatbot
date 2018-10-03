@@ -17,7 +17,7 @@ public class WatsonAssistant {
 	
 	private static Map<String, Context> contexts=new HashMap<>();
 
-	public static MessageResponse sendMessage(String message, String conversationId, String favoriteColor) {
+	public static MessageResponse sendMessage(String message, String conversationId, String favoriteColor, Boolean askEmail) {
 		service.setEndPoint("https://gateway.watsonplatform.net/assistant/api");
 		service.setUsernameAndPassword("ac5f123f-e25d-4f7c-9345-26b3358ea3a3", "QeDCp1vRhvio");
 		InputData data = new InputData.Builder(message).build();
@@ -26,6 +26,11 @@ public class WatsonAssistant {
 		if (StringUtils.isNotEmpty(favoriteColor)) {
 			context = context != null ? context : new Context();
 			context.put("favoriteColor", favoriteColor);
+		}
+
+		if (askEmail != null && askEmail) {
+			context = context != null ? context : new Context();
+			context.put("action", "askEmail");
 		}
 		
 		MessageOptions newMessageOptions = new MessageOptions.Builder().workspaceId(workspaceId)
