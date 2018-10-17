@@ -17,11 +17,13 @@ class App extends React.Component {
 
         this.handleSubmit  = this.handleSubmit.bind(this);
         this.handleRestart = this.handleRestart.bind(this);
+        window.callWatson = this.callWatson.bind(this);
+        window.getFavoriteColor = this.getFavoriteColor.bind(this);
     }
 
     componentDidMount() {
         // Todo: Call grapqhql entry point for favoriteColor (when window.cxs (CDP profile) is available). This will give context for the style.
-        var $this = this;
+        var $this          = this;
         var intervalWatson = setInterval(function () {
             if (window.cxs !== undefined) {
                 clearInterval(intervalWatson);
@@ -72,7 +74,7 @@ class App extends React.Component {
     }
 
     callWatson(message, favoriteColor, askEmail) {
-        console.log("Calling watson", favoriteColor);
+        console.log("Calling watson", askEmail, message, favoriteColor);
         fetch(this.props.dxContext.servletContext + '/modules/graphql',
             {
                 method : 'POST',
@@ -80,8 +82,8 @@ class App extends React.Component {
                     'Content-Type': 'application/json'
                 },
                 body   : JSON.stringify({
-                        query    : `query ($message: String!,$conversationId : String,$favoriteColor : String){
-                            sendMessage(message:$message, conversationId:$conversationId,favoriteColor:$favoriteColor){
+                        query    : `query ($message: String!,$conversationId : String,$favoriteColor : String, $askEmail : String){
+                            sendMessage(message:$message, conversationId:$conversationId,favoriteColor:$favoriteColor, askEmail:$askEmail){
                                 conversationId
                                 entities{
                                     name
@@ -91,13 +93,14 @@ class App extends React.Component {
                                 intents
                                 outputMessages
                                 canSearch
+                                emailAddress
                             }
                         }`,
                         variables: {
                             message       : message,
                             conversationId: this.state.conversationId,
                             favoriteColor : favoriteColor,
-                            askEmail : askEmail
+                            askEmail      : (askEmail !== undefined && askEmail) ? "true":"false"
                         }
                     }
                 )
@@ -134,6 +137,10 @@ class App extends React.Component {
         this.addMessage(msgObj);
         if (responseJson.canSearch) {
             this.formatProducts(outputConversationId);
+        }
+        if (responseJson.emailAddress !== null) {
+            console.log("User gave is consent updating CDP");
+            window.manageWemPrivacyInstances[Object.keys(window.manageWemPrivacyInstances)[0]].updateConsent(digitalData.scope,"outofstock",true);
         }
     }
 
@@ -194,16 +201,16 @@ class App extends React.Component {
     render() {
         return (
             <div className="app-wrapper">
-                <Conversation
-                    onSubmit={this.handleSubmit}
-                    onRestart={this.handleRestart}
-                    messageObjectList={this.state.messageObjectList}
-                />
-                <div className="watson_result">
-                    <ProductList dxContext={this.props.dxContext}
-                                 conversationId={this.state.conversationId}
-                                 profileId={this.state.profileId}/>
-                </div>
+                    <Conversation
+                        onSubmit={this.handleSubmit}
+                        onRestart={this.handleRestart}
+                        messageObjectList={this.state.messageObjectList}
+                    />
+                    <div className="watson_result">
+                        <ProductList dxContext={this.props.dxContext}
+                                     conversationId={this.state.conversationId}
+                                     profileId={this.state.profileId}/>
+                    </div>
             </div>
         );
     }

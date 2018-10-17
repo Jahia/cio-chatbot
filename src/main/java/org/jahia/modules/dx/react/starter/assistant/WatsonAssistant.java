@@ -10,8 +10,11 @@ import com.ibm.watson.developer_cloud.assistant.v1.model.Context;
 import com.ibm.watson.developer_cloud.assistant.v1.model.InputData;
 import com.ibm.watson.developer_cloud.assistant.v1.model.MessageOptions;
 import com.ibm.watson.developer_cloud.assistant.v1.model.MessageResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WatsonAssistant {
+	private static Logger logger = LoggerFactory.getLogger(WatsonAssistant.class);
 	private static Assistant service = new Assistant("2018-02-16");
 	private static String workspaceId = "a24131a9-a13f-441c-89f6-8ab38053de8d";
 	
@@ -28,9 +31,11 @@ public class WatsonAssistant {
 			context.put("favoriteColor", favoriteColor);
 		}
 
+		logger.info("askEmail value "+askEmail);
 		if (askEmail != null && askEmail) {
 			context = context != null ? context : new Context();
 			context.put("action", "askEmail");
+			logger.info("asking for Email");
 		}
 		
 		MessageOptions newMessageOptions = new MessageOptions.Builder().workspaceId(workspaceId)

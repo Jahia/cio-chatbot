@@ -27,7 +27,8 @@ class Products extends React.Component {
         this.state = {
             hasGrantedConsent : grantedConsent,
             consentText       : (grantedConsent ? "You have consented to the usage of your email to receive information about product out of stock." : "You have not consented to the usage of your email to receive information about product out of stock."),
-            shouldDisplayModal: displayModal
+            shouldDisplayModal: displayModal,
+            askedForEmailAlready: false
         };
         var $this  = this;
         if (window.manageWemPrivacy !== undefined) {
@@ -68,12 +69,18 @@ class Products extends React.Component {
             const prodIndex = prods.findIndex(function(prod){
                 return prod.outOfStock;
             });
-            if(prodIndex > -1){
-                console.log(prods[prodIndex]);
-                this.setState({
-                    dxContexts: {
-                        askEmail : true
+            if(prodIndex > -1 && !this.state.askedForEmailAlready) {
+                window.getFavoriteColor(window.cxs.profileId).then((responseJson) => {
+                    console.log(prods[prodIndex]);
+                    if(responseJson.data.favoriteColor !== null) {
+                        console.log("fav col:"+responseJson.data.favoriteColor);
+                        this.setState({
+                            askedForEmailAlready: true
+                        });
+                        window.callWatson("Asking for your consent", responseJson.data.favoriteColor, true);
                     }
+                }).catch(function (error) {
+                    console.log(error);
                 });
             }
         }

@@ -259,6 +259,8 @@ var App = function (_React$Component) {
 
         _this.handleSubmit = _this.handleSubmit.bind(_this);
         _this.handleRestart = _this.handleRestart.bind(_this);
+        window.callWatson = _this.callWatson.bind(_this);
+        window.getFavoriteColor = _this.getFavoriteColor.bind(_this);
         return _this;
     }
 
@@ -318,19 +320,19 @@ var App = function (_React$Component) {
         value: function callWatson(message, favoriteColor, askEmail) {
             var _this3 = this;
 
-            console.log("Calling watson", favoriteColor);
+            console.log("Calling watson", askEmail, message, favoriteColor);
             fetch(this.props.dxContext.servletContext + '/modules/graphql', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    query: 'query ($message: String!,$conversationId : String,$favoriteColor : String){\n                            sendMessage(message:$message, conversationId:$conversationId,favoriteColor:$favoriteColor){\n                                conversationId\n                                entities{\n                                    name\n                                    value\n                                    confidence\n                                }\n                                intents\n                                outputMessages\n                                canSearch\n                            }\n                        }',
+                    query: 'query ($message: String!,$conversationId : String,$favoriteColor : String, $askEmail : String){\n                            sendMessage(message:$message, conversationId:$conversationId,favoriteColor:$favoriteColor, askEmail:$askEmail){\n                                conversationId\n                                entities{\n                                    name\n                                    value\n                                    confidence\n                                }\n                                intents\n                                outputMessages\n                                canSearch\n                                emailAddress\n                            }\n                        }',
                     variables: {
                         message: message,
                         conversationId: this.state.conversationId,
                         favoriteColor: favoriteColor,
-                        askEmail: askEmail
+                        askEmail: askEmail !== undefined && askEmail ? "true" : "false"
                     }
                 })
             }).then(function (response) {
@@ -369,6 +371,10 @@ var App = function (_React$Component) {
             this.addMessage(msgObj);
             if (responseJson.canSearch) {
                 this.formatProducts(outputConversationId);
+            }
+            if (responseJson.emailAddress !== null) {
+                console.log("User gave is consent updating CDP");
+                window.manageWemPrivacyInstances[Object.keys(window.manageWemPrivacyInstances)[0]].updateConsent(digitalData.scope, "outofstock", true);
             }
         }
     }, {
@@ -583,13 +589,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash_isNil__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_isNil__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_i18next__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-i18next */ "./node_modules/react-i18next/dist/es/index.js");
-/* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-apollo */ "./node_modules/react-apollo/index.js");
-/* harmony import */ var _DxContext_jsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../DxContext.jsx */ "./src/main/javascript/app/DxContext.jsx");
-/* harmony import */ var _products_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./products.jsx */ "./src/main/javascript/app/productbot/products.jsx");
-/* harmony import */ var apollo_client__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! apollo-client */ "./node_modules/apollo-client/index.js");
-/* harmony import */ var apollo_link_http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! apollo-link-http */ "./node_modules/apollo-link-http/lib/index.js");
-/* harmony import */ var apollo_cache_inmemory__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! apollo-cache-inmemory */ "./node_modules/apollo-cache-inmemory/lib/index.js");
+/* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-apollo */ "./node_modules/react-apollo/index.js");
+/* harmony import */ var _DxContext_jsx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../DxContext.jsx */ "./src/main/javascript/app/DxContext.jsx");
+/* harmony import */ var _products_jsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./products.jsx */ "./src/main/javascript/app/productbot/products.jsx");
+/* harmony import */ var apollo_client__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! apollo-client */ "./node_modules/apollo-client/index.js");
+/* harmony import */ var apollo_link_http__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! apollo-link-http */ "./node_modules/apollo-link-http/lib/index.js");
+/* harmony import */ var apollo_cache_inmemory__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! apollo-cache-inmemory */ "./node_modules/apollo-cache-inmemory/lib/index.js");
+/* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./App */ "./src/main/javascript/app/productbot/App.jsx");
 
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -611,13 +617,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var client = function client(props) {
-    var link = new apollo_link_http__WEBPACK_IMPORTED_MODULE_7__["HttpLink"]({
+    var link = new apollo_link_http__WEBPACK_IMPORTED_MODULE_6__["HttpLink"]({
         uri: props.dxContext.servletContext + '/modules/graphql'
     });
 
-    return new apollo_client__WEBPACK_IMPORTED_MODULE_6__["ApolloClient"]({
+    return new apollo_client__WEBPACK_IMPORTED_MODULE_5__["ApolloClient"]({
         link: link,
-        cache: new apollo_cache_inmemory__WEBPACK_IMPORTED_MODULE_8__["InMemoryCache"]()
+        cache: new apollo_cache_inmemory__WEBPACK_IMPORTED_MODULE_7__["InMemoryCache"]()
     });
 };
 
@@ -631,27 +637,26 @@ var ProductList = function (_React$Component) {
     }
 
     _createClass(ProductList, [{
-        key: 'render',
+        key: "render",
         value: function render() {
             var _props = this.props,
                 dxContext = _props.dxContext,
                 conversationId = _props.conversationId,
-                profileId = _props.profileId,
-                watsonCall = _props.watsonCall;
+                profileId = _props.profileId;
 
             return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(
-                react_apollo__WEBPACK_IMPORTED_MODULE_3__["ApolloProvider"],
+                react_apollo__WEBPACK_IMPORTED_MODULE_2__["ApolloProvider"],
                 { client: client(this.props) },
                 react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(
-                    _DxContext_jsx__WEBPACK_IMPORTED_MODULE_4__["DxContext"].Provider,
+                    _DxContext_jsx__WEBPACK_IMPORTED_MODULE_3__["DxContext"].Provider,
                     { value: dxContext },
                     lodash_isNil__WEBPACK_IMPORTED_MODULE_0___default()(conversationId) || lodash_isNil__WEBPACK_IMPORTED_MODULE_0___default()(profileId) ? react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(
-                        'span',
+                        "span",
                         { style: { paddingTop: 35, fontSize: 69 } },
-                        react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement('i', { className: 'fas fa-box' })
-                    ) : react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_products_jsx__WEBPACK_IMPORTED_MODULE_5__["default"], { dxContext: dxContext,
+                        react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", { className: "fas fa-box" })
+                    ) : react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_products_jsx__WEBPACK_IMPORTED_MODULE_4__["default"], { dxContext: dxContext,
                         conversationId: conversationId,
-                        profileId: profileId, watsonCall: watsonCall })
+                        profileId: profileId })
                 )
             );
         }
@@ -743,7 +748,8 @@ var Products = function (_React$Component) {
         _this.state = {
             hasGrantedConsent: grantedConsent,
             consentText: grantedConsent ? "You have consented to the usage of your email to receive information about product out of stock." : "You have not consented to the usage of your email to receive information about product out of stock.",
-            shouldDisplayModal: displayModal
+            shouldDisplayModal: displayModal,
+            askedForEmailAlready: false
         };
         var $this = _this;
         if (window.manageWemPrivacy !== undefined) {
@@ -782,17 +788,25 @@ var Products = function (_React$Component) {
     _createClass(Products, [{
         key: "componentWillReceiveProps",
         value: function componentWillReceiveProps(newProps) {
+            var _this2 = this;
+
             if (!newProps.fetchProducts.loading) {
                 var prods = newProps.fetchProducts.products ? newProps.fetchProducts.products : [];
                 var prodIndex = prods.findIndex(function (prod) {
                     return prod.outOfStock;
                 });
-                if (prodIndex > -1) {
-                    console.log(prods[prodIndex]);
-                    this.setState({
-                        dxContexts: {
-                            askEmail: true
+                if (prodIndex > -1 && !this.state.askedForEmailAlready) {
+                    window.getFavoriteColor(window.cxs.profileId).then(function (responseJson) {
+                        console.log(prods[prodIndex]);
+                        if (responseJson.data.favoriteColor !== null) {
+                            console.log("fav col:" + responseJson.data.favoriteColor);
+                            _this2.setState({
+                                askedForEmailAlready: true
+                            });
+                            window.callWatson("Asking for your consent", responseJson.data.favoriteColor, true);
                         }
+                    }).catch(function (error) {
+                        console.log(error);
                     });
                 }
             }

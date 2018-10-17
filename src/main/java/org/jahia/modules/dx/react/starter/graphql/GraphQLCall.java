@@ -34,14 +34,14 @@ public class GraphQLCall {
 		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
 		ObjectMapper om = new ObjectMapper();
 		String jsonValue=om.writeValueAsString(jsonObj);
-		LOGGER.info("Graphql request : " + jsonValue);
+//		LOGGER.info("Graphql request : " + jsonValue);
 		wr.writeBytes(jsonValue);
 		wr.flush();
 		wr.close();
 		
 		int responseCode = con.getResponseCode();
-		LOGGER.info("Sending 'POST' request to URL : " + url);
-		LOGGER.info("Response Code : " + responseCode);
+//		LOGGER.info("Sending 'POST' request to URL : " + url);
+//		LOGGER.info("Response Code : " + responseCode);
 
 		BufferedReader in = new BufferedReader(
 		        new InputStreamReader(con.getInputStream()));

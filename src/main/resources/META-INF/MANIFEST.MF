@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1538562257122
+Bnd-LastModified: 1538722457691
 Build-Jdk: 1.8.0_181
 Built-By: rincevent
 Bundle-Category: jahia-module
@@ -41,22 +41,22 @@ Import-Package: javax.jcr;version="[2.0,3)",org.apache.commons.lang;vers
  g.jahia.modules.graphql.provider.dxm;version="[1.0,2)",org.jahia.module
  s.marketingfactory.admin;version="[1.9,2)",org.jahia.osgi,org.jahia.reg
  istries,org.jahia.services.usermanager,org.json,org.osgi.framework;vers
- ion="[1.8,2)",org.slf4j;version="[1.7,2)",org.apache.taglibs.standard.t
- ag.common.core,org.jahia.defaults.config.spring,org.apache.taglibs.stan
- dard.functions,org.jahia.services.content.nodetypes,org.jahia.taglibs.t
- emplate.include;version="[7.2,8)",org.jahia.utils,org.jahia.data.viewhe
- lper.principal,org.jahia.taglibs.template.pager;version="[7.2,8)",org.j
- ahia.exceptions,org.jahia.taglibs.jcr.node;version="[7.2,8)",org.apache
- .taglibs.standard.tei,org.jahia.taglibs.functions;version="[7.2,8)",org
- .jahia.taglibs.user;version="[7.2,8)",javax.servlet.http;version="[3.0,
- 4)",org.jahia.taglibs.template;version="[7.2,8)",org.apache.commons.id,
- org.jahia.taglibs.template.layoutmanager;version="[7.2,8)",org.jahia.se
- rvices.render,org.jahia.taglibs.query;version="[7.2,8)",org.apache.nami
- ng.java,org.jahia.services.seo,org.jahia.taglibs.jcr.query;version="[7.
- 2,8)",org.jahia.taglibs;version="[7.2,8)",org.apache.commons.lang.math;
- version="[2.6,3)",org.jahia.services.content,org.jahia.services,org.apa
- che.taglibs.standard.tag.rt.core,org.jahia.taglibs.jcr;version="[7.2,8)
- ",org.jahia.taglibs.template.gwt;version="[7.2,8)"
+ ion="[1.8,2)",org.slf4j;version="[1.7,2)",org.jahia.services.render,org
+ .apache.taglibs.standard.tei,org.jahia.defaults.config.spring,org.jahia
+ .taglibs.jcr;version="[7.2,8)",org.jahia.services.content,javax.servlet
+ .http;version="[3.0,4)",org.jahia.taglibs.template.layoutmanager;versio
+ n="[7.2,8)",org.apache.commons.id,org.apache.taglibs.standard.tag.commo
+ n.core,org.apache.taglibs.standard.tag.rt.core,org.jahia.taglibs.templa
+ te.gwt;version="[7.2,8)",org.jahia.services,org.jahia.taglibs.jcr.query
+ ;version="[7.2,8)",org.jahia.taglibs.functions;version="[7.2,8)",org.ja
+ hia.taglibs.template.pager;version="[7.2,8)",org.jahia.exceptions,org.j
+ ahia.taglibs;version="[7.2,8)",org.apache.taglibs.standard.functions,or
+ g.jahia.data.viewhelper.principal,org.jahia.taglibs.query;version="[7.2
+ ,8)",org.jahia.taglibs.template;version="[7.2,8)",org.jahia.taglibs.use
+ r;version="[7.2,8)",org.jahia.utils,org.jahia.services.seo,org.apache.n
+ aming.java,org.jahia.taglibs.template.include;version="[7.2,8)",org.jah
+ ia.taglibs.jcr.node;version="[7.2,8)",org.jahia.services.content.nodety
+ pes,org.apache.commons.lang.math;version="[2.6,3)"
 Jahia-Depends: default
 Jahia-Download-Sources-Available: true
 Jahia-GroupId: org.jahia.modules
